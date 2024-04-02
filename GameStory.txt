@@ -1,0 +1,5 @@
+1. Map 1 (The Park)
+-- This map is set in a park where kids play around and pollute the park. You are an environmental activist who is really concrned about the cleanliness of this park. So you have decided to catch those naughty kids and hand them over to their parents. Also at the same time you decided to collect all waste from this park and make it cleaner and greener. There will be a time limit in doing this tasks, and the park will be like a maze, there will be various levels of this park (Currently 5). There will be various powerups within the game, which will boost your score or increase your time left.
+
+2. Map 2 (Dungeon)
+--
