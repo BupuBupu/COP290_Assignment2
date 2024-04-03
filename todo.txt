@@ -3,3 +3,19 @@ RAJARSHEE
 2. Particle Effect
 3. Collisions in PyGame
 
+Undecided:
+UI
+
+
+VIPUL:
+TO DO:
+Collision between two dynamic objects
+Pygame masks(advanced Collisions)
+Minor Player inventory
+
+Done:
+Overlay
+Animations
+Tools
+Camera and importing and using map
+Importing all objects of map/tmx format
