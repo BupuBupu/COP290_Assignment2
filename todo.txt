@@ -19,3 +19,4 @@ Animations
 Tools
 Camera and importing and using map
 Importing all objects of map/tmx format
+collisions between dynamic and static object
