@@ -9,7 +9,7 @@ UI
 
 VIPUL:
 TO DO:
-Minor Player inventory
+COMPLETED FROM  MY SIDE
 
 Done:
 Overlay
@@ -19,6 +19,7 @@ Camera and importing and using map
 Importing all objects of map/tmx format
 collisions between dynamic and static object
 Collision between two dynamic objects(using Position comparison of those two object in current frame and previous frame)
+Minor Player Inventory
 
 
 Issues with Collisions:
