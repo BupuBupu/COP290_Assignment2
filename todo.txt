@@ -9,8 +9,6 @@ UI
 
 VIPUL:
 TO DO:
-Collision between two dynamic objects
-Pygame masks(advanced Collisions)
 Minor Player inventory
 
 Done:
@@ -20,3 +18,10 @@ Tools
 Camera and importing and using map
 Importing all objects of map/tmx format
 collisions between dynamic and static object
+Collision between two dynamic objects
+
+
+Issues with Collisions:
+
+Can't handle multiple collisions in a single frame, 
+The latest collision in that frame takes the priority.
