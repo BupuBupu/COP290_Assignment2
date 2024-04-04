@@ -18,7 +18,7 @@ Tools
 Camera and importing and using map
 Importing all objects of map/tmx format
 collisions between dynamic and static object
-Collision between two dynamic objects
+Collision between two dynamic objects(using Position comparison of those two object in current frame and previous frame)
 
 
 Issues with Collisions:
