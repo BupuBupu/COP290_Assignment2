@@ -18,6 +18,9 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
         self.speed = 200
+        
+        # attributes
+        self.points = 0
     
     def import_assets(self):
         self.animations = {
