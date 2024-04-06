@@ -12,6 +12,7 @@ class Player(pygame.sprite.Sprite):
         # general setup
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
+        self.animate_speed = 4
         
         # movement
         self.direction = pygame.math.Vector2()
@@ -31,7 +32,7 @@ class Player(pygame.sprite.Sprite):
         print(self.animations)
     
     def animate(self, dt):
-        self.frame_index += 4 * dt
+        self.frame_index += self.animate_speed * dt
         self.frame_index %= len(self.animations[self.status])
         self.image = self.animations[self.status][int(self.frame_index)]
     
@@ -59,8 +60,10 @@ class Player(pygame.sprite.Sprite):
         # faster movement
         if keys[pygame.K_LSHIFT]:
             self.speed = 400
+            self.animate_speed = 8
         else:
             self.speed = 200
+            self.animate_speed = 4
     
     def get_status(self):
         if self.direction.magnitude()==0:
