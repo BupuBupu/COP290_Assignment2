@@ -27,12 +27,9 @@ class Player(pygame.sprite.Sprite):
             "up": [], "down": [], "left": [], "right": [],
             "up_idle": [], "down_idle": [], "left_idle": [], "right_idle": []
         }
-        print("heheeh")
         for animation in self.animations.keys():
             full_path = "../assets/characters/player/player1/" + animation
             self.animations[animation] = import_folder(full_path, 3)
-        
-        print(self.animations)
     
     def animate(self, dt):
         self.frame_index += self.animate_speed * dt

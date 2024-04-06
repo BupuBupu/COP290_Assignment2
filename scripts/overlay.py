@@ -2,13 +2,12 @@ import pygame
 from settings import *
 
 class Overlay_points:
-    def __init__(self, player, pos, font=None, font_size=24, col=(0, 255, 0)):
+    def __init__(self, text, pos, font=None, font_size=60, text_col=(0, 255, 0), text_rect_col = (0, 0, 108)):
         
         self.display_surface = pygame.display.get_surface()
-        self.player = player
         
-        self.font = pygame.font.Font('freesansbold.ttf', font_size)
-        self.text = self.font.render(f"Naughty Kids Kidnapped: {self.player.points}", True, (0, 255, 0))
+        self.font = pygame.font.Font(font, font_size)
+        self.text = self.font.render(text, True, text_col, text_rect_col)
         self.textRect = self.text.get_rect(center=pos)
     
     def display(self):
