@@ -8,7 +8,7 @@ class Overlay_points:
         self.player = player
         
         self.font = pygame.font.Font('freesansbold.ttf', font_size)
-        self.text = self.font.render(f"Points: {self.player.points}", True, (0, 255, 0))
+        self.text = self.font.render(f"Naughty Kids Kidnapped: {self.player.points}", True, (0, 255, 0))
         self.textRect = self.text.get_rect(center=pos)
     
     def display(self):
