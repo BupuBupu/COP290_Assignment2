@@ -1,7 +1,5 @@
 RAJARSHEE
-1. Path Finding for enemy
-2. Particle Effect
-3. Collisions in PyGame
+1. Particle Effect
 
 Undecided:
 UI
@@ -20,7 +18,8 @@ Importing all objects of map/tmx format
 collisions between dynamic and static object
 Collision between two dynamic objects(using Position comparison of those two object in current frame and previous frame)
 Minor Player Inventory
-
+Path Finding for enemy
+Saving the game state
 
 Issues with Collisions:
 
