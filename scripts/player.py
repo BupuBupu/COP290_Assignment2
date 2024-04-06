@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
             "up_idle": [], "down_idle": [], "left_idle": [], "right_idle": []
         }
         for animation in self.animations.keys():
-            full_path = "../assets/characters/player/player1/" + animation
+            full_path = "assets/characters/player/player1/" + animation
             self.animations[animation] = import_folder(full_path, 3)
     
     def animate(self, dt):
