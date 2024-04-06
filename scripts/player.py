@@ -3,8 +3,9 @@ from settings import *
 from support import import_folder
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group):
+    def __init__(self, pos, group, player_num):
         super().__init__(group)
+        self.player_num = player_num
         self.import_assets()
         self.status = "down_idle"
         self.frame_index = 0
@@ -28,7 +29,7 @@ class Player(pygame.sprite.Sprite):
             "up_idle": [], "down_idle": [], "left_idle": [], "right_idle": []
         }
         for animation in self.animations.keys():
-            full_path = "assets/characters/player/player1/" + animation
+            full_path = f"assets/characters/player/player{self.player_num}/" + animation
             self.animations[animation] = import_folder(full_path, 3)
     
     def animate(self, dt):
