@@ -48,7 +48,7 @@ class CameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
         
         # zoom
-        self.zoom_scale = 1
+        self.zoom_scale = 4
     
     def custom_draw(self, player):
         # due to offset, rect and image are not in pos
@@ -61,6 +61,8 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     if hasattr(sprite, "import_assets"):
+                        # player's hitbox
                         sprite.rect.center -= self.offset
                         pygame.draw.rect(self.display_surface, "red", sprite.rect)
+                        pygame.draw.rect(self.display_surface, "blue", sprite.old_rect)
                     self.display_surface.blit(sprite.image, offset_rect)
