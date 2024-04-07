@@ -3,7 +3,7 @@ from settings import *
 from support import import_folder
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, player_num):
+    def __init__(self, pos, group, player_num=1):
         super().__init__(group)
         self.player_num = player_num
         self.import_assets()
@@ -13,12 +13,13 @@ class Player(pygame.sprite.Sprite):
         # general setup
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.animate_speed = 4
+        self.animate_speed = PLAYER_ANIMATION_SPEED
+        self.z = LAYERS["player"]
         
         # movement
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
-        self.speed = 200
+        self.speed = PLAYER_SPEED
         
         # attributes
         self.points = 0
@@ -60,11 +61,11 @@ class Player(pygame.sprite.Sprite):
     
         # faster movement
         if keys[pygame.K_LSHIFT]:
-            self.speed = 400
-            self.animate_speed = 8
+            self.speed = PLAYER_SPEED * 2
+            self.animate_speed = PLAYER_ANIMATION_SPEED * 2
         else:
-            self.speed = 200
-            self.animate_speed = 4
+            self.speed = PLAYER_SPEED
+            self.animate_speed = PLAYER_ANIMATION_SPEED
     
     def get_status(self):
         if self.direction.magnitude()==0:
