@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         }
         for animation in self.animations.keys():
             full_path = f"assets/characters/player/player{self.player_num}/" + animation
-            self.animations[animation] = import_folder(full_path, 1)
+            self.animations[animation] = import_folder(full_path, 4)
     
     def animate(self, dt):
         self.frame_index += self.animate_speed * dt

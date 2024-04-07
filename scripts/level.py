@@ -20,6 +20,7 @@ class Level:
             if hasattr(layer, 'data'):
                 for x, y, surf in layer.tiles():
                     pos = (x*TILE_SIZE, y*TILE_SIZE)
+                    surf = pygame.transform.scale(surf, (surf.get_width()*self.all_sprites.zoom_scale, surf.get_height()*self.all_sprites.zoom_scale))
                     Generic(pos, surf, self.all_sprites, LAYERS["map"])
         
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, 2)
@@ -47,14 +48,8 @@ class CameraGroup(pygame.sprite.Group):
         
         # zoom
         self.zoom_scale = 4
-        self.internal_surf_size = (2500, 2500)
-        self.internal_surf = pygame.Surface(self.internal_surf_size, pygame.SRCALPHA) # this enables alpha on this surface
-        self.internal_rect = self.internal_surf.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-        self.internal_surf_size_vector = pygame.math.Vector2(self.internal_surf_size) 
     
     def custom_draw(self, player):
-        #self.internal_surf.fill(self.display_surface.get_colorkey())
-        
         self.offset.x = player.rect.centerx - SCREEN_WIDTH/2
         self.offset.y = player.rect.centery - SCREEN_HEIGHT/2
         for layer in LAYERS.values():
