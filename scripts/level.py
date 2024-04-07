@@ -62,7 +62,7 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect.center -= self.offset
                     if hasattr(sprite, "import_assets"):
                         # player's hitbox
-                        sprite.old_rect.center -= self.offset
                         sprite.rect.center -= self.offset
                         pygame.draw.rect(self.display_surface, "red", sprite.rect)
+                        pygame.draw.rect(self.display_surface, "blue", sprite.old_rect)
                     self.display_surface.blit(sprite.image, offset_rect)
