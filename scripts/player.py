@@ -3,7 +3,7 @@ from settings import *
 from support import import_folder
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, player_num=1):
+    def __init__(self, pos, group, collision_sprites, player_num=1):
         super().__init__(group)
         self.player_num = player_num
         self.import_assets()
@@ -21,6 +21,10 @@ class Player(pygame.sprite.Sprite):
         self.pos = pygame.math.Vector2(self.rect.center)
         self.speed = PLAYER_SPEED
         
+        # collision
+        self.collision_sprites = collision_sprites
+        self.old_rect = self.rect.copy()
+        
         # attributes
         self.points = 0
     
@@ -31,7 +35,7 @@ class Player(pygame.sprite.Sprite):
         }
         for animation in self.animations.keys():
             full_path = f"assets/characters/player/player{self.player_num}/" + animation
-            self.animations[animation] = import_folder(full_path, 1)
+            self.animations[animation] = import_folder(full_path, 4)
     
     def animate(self, dt):
         self.frame_index += self.animate_speed * dt
@@ -85,8 +89,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.centery = round(self.pos.y)
         
     def update(self, dt):
+        self.old_rect.copy() # previous frame
         self.input()
         self.get_status()
-        self.move(dt)
+        self.move(dt) # current frame
         self.animate(dt)
         print(self.rect.center, self.rect.copy().center, self.pos)
