@@ -13,7 +13,7 @@ class Level:
         self.points_display = Overlay_points(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
     
     def setup(self):
-        self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, 1)
+        self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, 2)
         self.enemy1 = Enemy(
             target=self.player,
             pos=(SCREEN_WIDTH/4, SCREEN_HEIGHT/2),
@@ -25,7 +25,7 @@ class Level:
     
     def run(self, dt):
         self.display_surface.fill("black")
-        self.all_sprites.custom_draw()
+        self.all_sprites.custom_draw(self.player)
         self.points_display.display()
         self.all_sprites.update(dt)
         
@@ -34,10 +34,15 @@ class CameraGroup(pygame.sprite.Group):
     def __init__(self, ):
         super().__init__()
         self.display_surface = pygame.display.get_surface()
+        self.offset = pygame.math.Vector2()
     
-    def custom_draw(self):
+    def custom_draw(self, player):
+        self.offset.x = player.rect.centerx - SCREEN_WIDTH/2
+        self.offset.y = player.rect.centery - SCREEN_HEIGHT/2
         for layer in LAYERS.values():
             # for same layer, create fake 3D effect
             for sprite in sorted(self.sprites(), key=lambda sprite:sprite.rect.centery):
                 if sprite.z == layer:
-                    self.display_surface.blit(sprite.image, sprite.pos)
+                    offset_rect = sprite.rect.copy()
+                    offset_rect.center -= self.offset
+                    self.display_surface.blit(sprite.image, offset_rect)
