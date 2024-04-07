@@ -23,6 +23,15 @@ class Level:
                     surf = pygame.transform.scale(surf, (surf.get_width()*self.all_sprites.zoom_scale, surf.get_height()*self.all_sprites.zoom_scale))
                     Generic(pos, surf, self.all_sprites, LAYERS["map"])
         
+        for obj in tmx_data.get_layer_by_name("Tree 2"):
+            # print(obj.image)
+            # if obj.name == "tree_medium":
+            #     print(obj.image)
+            print(obj)
+            Generic(pos = (obj.x, obj.y), 
+                 surf = obj.image, 
+                 groups = self.all_sprites)
+        
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, 2)
         self.enemy1 = Enemy(
             target=self.player,
@@ -38,7 +47,7 @@ class Level:
         self.all_sprites.custom_draw(self.player)
         self.points_display.display()
         self.all_sprites.update(dt)
-        print(pygame.time.Clock().get_fps())
+        #print(pygame.time.Clock().get_fps())
         
 
 class CameraGroup(pygame.sprite.Group):
@@ -48,7 +57,7 @@ class CameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
         
         # zoom
-        self.zoom_scale = 4
+        self.zoom_scale = 1
     
     def custom_draw(self, player):
         # due to offset, rect and image are not in pos

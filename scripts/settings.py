@@ -4,7 +4,7 @@ from pygame.math import Vector2
 pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
 SCREEN_HEIGHT = pygame.display.Info().current_h
-TILE_SIZE = 64
+TILE_SIZE = 16
 
 # player attributes
 PLAYER_SPEED = 200
