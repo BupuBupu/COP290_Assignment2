@@ -1,7 +1,9 @@
+import pygame
 from pygame.math import Vector2
 # screen
-SCREEN_WIDTH = 1920
-SCREEN_HEIGHT = 1080
+pygame.init()
+SCREEN_WIDTH = pygame.display.Info().current_w
+SCREEN_HEIGHT = pygame.display.Info().current_h
 TILE_SIZE = 64
 
 # player attributes
