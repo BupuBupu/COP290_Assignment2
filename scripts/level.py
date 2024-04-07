@@ -15,7 +15,7 @@ class Level:
         self.points_display = Overlay_points(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
     
     def setup(self):
-        tmx_data = load_pygame("assets/tilesets/Map/Map.tmx")
+        tmx_data = load_pygame("assets/New_Map/Map.tmx")
         for layer in tmx_data.layers:
             if hasattr(layer, 'data'):
                 for x, y, surf in layer.tiles():
