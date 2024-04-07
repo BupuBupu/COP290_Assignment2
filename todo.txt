@@ -1,5 +1,5 @@
 RAJARSHEE
-1. Particle Effect
+Done 
 
 Undecided:
 UI
@@ -20,6 +20,7 @@ Collision between two dynamic objects(using Position comparison of those two obj
 Minor Player Inventory
 Path Finding for enemy
 Saving the game state
+Particle Effect 
 
 Issues with Collisions:
 
