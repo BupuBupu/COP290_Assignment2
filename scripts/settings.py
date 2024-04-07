@@ -4,7 +4,7 @@ from pygame.math import Vector2
 pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
 SCREEN_HEIGHT = pygame.display.Info().current_h
-TILE_SIZE = 64
+TILE_SIZE = 16
 
 # player attributes
 PLAYER_SPEED = 200
@@ -12,6 +12,6 @@ PLAYER_ANIMATION_SPEED = 4
 
 # lower the layer num, more below it is in z-axis
 LAYERS = {
-    "enemy": 0,
-    "player": 0
+    "map": 0,
+    "main": 1
 }

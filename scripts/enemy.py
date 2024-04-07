@@ -12,7 +12,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill("green")
         self.rect = self.image.get_rect(center=pos)
         self.animate_speed = anim_speed
-        self.z = LAYERS["enemy"]
+        self.z = LAYERS["main"]
         
         # movement
         self.direction = pygame.math.Vector2()
