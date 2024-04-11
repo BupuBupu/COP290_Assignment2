@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
         
         # collision
         self.collision_sprites = collision_sprites
-        self.old_rect = self.rect.copy()
+        self.hitbox = self.rect.copy().inflate((-self.rect.width*0.2, -self.rect.height*0.2))
         
         # attributes
         self.points = 0
@@ -35,7 +35,7 @@ class Player(pygame.sprite.Sprite):
         }
         for animation in self.animations.keys():
             full_path = f"assets/characters/player/player{self.player_num}/" + animation
-            self.animations[animation] = import_folder(full_path, 1)
+            self.animations[animation] = import_folder(full_path, 4)
     
     def animate(self, dt):
         self.frame_index += self.animate_speed * dt
@@ -75,6 +75,31 @@ class Player(pygame.sprite.Sprite):
         if self.direction.magnitude()==0:
             self.status = self.status.split('_')[0] + "_idle"
             
+    def collision(self, direction):
+        for sprite in self.collision_sprites.sprites():
+            if hasattr(sprite, "hitbox"): # has attribute
+                if sprite.hitbox.colliderect(self.hitbox):
+                    print(sprite)
+                    pygame.draw.rect(pygame.display.get_surface(), "orange", sprite.hitbox)
+                    #pygame.draw.rect(pygame.display.get_surface(), "orange", sprite.hitbox)
+                    # we need to know the direction of collision, so that we can snap it back
+                    if direction == "horizontal":
+                        if self.direction.x > 0: # moving to right, so collision happened on left
+                            self.hitbox.right = sprite.hitbox.left
+                        if self.direction.x < 0: # moving left
+                            self.hitbox.left = sprite.hitbox.right
+                        # above we are only updating hitbox, we are not updating our image rect which the player actually sees
+                        self.rect.centerx = self.hitbox.centerx
+                        self.pos.x = self.hitbox.centerx
+                    elif direction == "vertical":
+                        if self.direction.y > 0: #moving down
+                            self.hitbox.bottom = sprite.hitbox.top
+                        elif self.direction.y < 0: # moving up
+                            self.hitbox.top = sprite.hitbox.bottom
+                        self.rect.centery = self.hitbox.centery
+                        self.pos.y = self.hitbox.centery
+                
+            
     def move(self, dt):
         # Normalizing the vector
         if(self.direction.magnitude()):
@@ -82,16 +107,20 @@ class Player(pygame.sprite.Sprite):
         
         # horizontal movement
         self.pos.x += self.direction.x * self.speed * dt
-        self.rect.centerx = round(self.pos.x) # round for consistency since rect positions work in integer
+        self.hitbox.x = round(self.pos.x)
+        self.rect.centerx = self.hitbox.centerx # round for consistency since rect positions work in integer
+        self.collision("horizontal")
         
         # vertical movement
         self.pos.y += self.direction.y * self.speed * dt
-        self.rect.centery = round(self.pos.y)
+        self.hitbox.y = round(self.pos.y)
+        self.rect.centery = self.hitbox.centery
+        self.collision("vertical")
         
     def update(self, dt):
-        self.old_rect.copy() # previous frame
         self.input()
         self.get_status()
-        self.move(dt) # current frame
+        self.move(dt)
         self.animate(dt)
+        print(self.direction)
         #print(self.rect.center, self.rect.copy().center, self.pos)
