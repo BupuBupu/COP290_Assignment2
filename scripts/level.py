@@ -29,6 +29,9 @@ class Level:
         for x, y, surf in tmx_data.get_layer_by_name("Water").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
             Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+        for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, self.all_sprites, LAYERS["map"])
             
         for x, y, surf in tmx_data.get_layer_by_name("Decoration").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
@@ -42,9 +45,7 @@ class Level:
             pos = (x*TILE_SIZE, y*TILE_SIZE)
             Generic(pos, surf, self.all_sprites, LAYERS["map"])
         
-        for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+
         
         for obj in tmx_data.get_layer_by_name("Trees"):
             surf = obj.image
