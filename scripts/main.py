@@ -11,6 +11,7 @@ class Game:
 		self.level = Level()
 
 	def run(self):
+		self.clock.tick(60)
 		previous_time = time.time()
 		while True:
 			dt = time.time() - previous_time
