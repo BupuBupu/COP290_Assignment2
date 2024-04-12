@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy
 from overlay import Overlay_points
-from sprites import Generic
+from sprites import Generic, Tree
 from pytmx.util_pygame import load_pygame
 from support import *
 
@@ -22,28 +22,46 @@ class Level:
 
     def setup(self):
         tmx_data = load_pygame("assets/Another_New_Map/Map.tmx")
-        for layer in tmx_data.layers:
-            if hasattr(layer, "data"):
-                for x, y, surf in layer.tiles():
-                    pos = (x*TILE_SIZE, y*TILE_SIZE)
-                    Generic(pos, surf, self.all_sprites, LAYERS["map"])
+        for x, y, surf in tmx_data.get_layer_by_name("Ground").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+                
+        for x, y, surf in tmx_data.get_layer_by_name("Water").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+            
+        for x, y, surf in tmx_data.get_layer_by_name("Decoration").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+        
+        for x, y, surf in tmx_data.get_layer_by_name("Fences").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+
+        for x, y, surf in tmx_data.get_layer_by_name("Bridge").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+        
+        for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, self.all_sprites, LAYERS["map"])
         
         for obj in tmx_data.get_layer_by_name("Trees"):
-            if obj.name=="tree_medium":
-                surf = obj.image
-                Generic(
-                    pos=(obj.x, obj.y),
-                    surf=surf,
-                    groups=[self.all_sprites, self.collision_sprites]
-                )
+            surf = obj.image
+            Tree(
+                pos=(obj.x, obj.y),
+                surf=surf,
+                name=obj.name,
+                groups=[self.all_sprites, self.collision_sprites]
+            )
         
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
         self.enemy1 = Enemy(
             target=self.player,
             pos=(SCREEN_WIDTH/4, SCREEN_HEIGHT/2),
             group=self.all_sprites,
-            speed=160,
-            anim_speed=3.2,
+            speed=PLAYER_SPEED*0.8,
+            anim_speed=PLAYER_ANIMATION_SPEED*0.8,
             enemy_num=1
         )
     

@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, time
 from settings import *
 from level import Level
 
@@ -11,13 +11,19 @@ class Game:
 		self.level = Level()
 
 	def run(self):
+		previous_time = time.time()
 		while True:
+			dt = time.time() - previous_time
+			previous_time = time.time()
+			keys = pygame.key.get_pressed()
+			if keys[pygame.K_ESCAPE]:
+				pygame.quit()
+				sys.exit()
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
-  
-			dt = self.clock.tick() / 1000
+
 			self.level.run(dt)
 			pygame.display.update()
 

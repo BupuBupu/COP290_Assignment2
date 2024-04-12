@@ -48,30 +48,30 @@ class Player(pygame.sprite.Sprite):
 		keys = pygame.key.get_pressed()
 
 		# directions 
-		if keys[pygame.K_UP]:
+		if keys[pygame.K_w] or keys[pygame.K_UP]:
 			self.direction.y = -1
 			self.status = 'up'
-		elif keys[pygame.K_DOWN]:
+		elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
 			self.direction.y = 1
 			self.status = 'down'
 		else:
 			self.direction.y = 0
 
-		if keys[pygame.K_RIGHT]:
+		if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
 			self.direction.x = 1
 			self.status = 'right'
-		elif keys[pygame.K_LEFT]:
+		elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
 			self.direction.x = -1
 			self.status = 'left'
 		else:
 			self.direction.x = 0
         # faster movement
 		if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-			self.speed = 400
-			self.animate_speed = 8
+			self.speed = PLAYER_SPEED * 2
+			self.animate_speed = PLAYER_ANIMATION_SPEED * 2
 		else:
-			self.speed = 200
-			self.animate_speed = 4
+			self.speed = PLAYER_SPEED
+			self.animate_speed = PLAYER_ANIMATION_SPEED
 
 	def get_status(self):
 		# idle
