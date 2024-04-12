@@ -18,6 +18,9 @@ class Level:
         self.collision_sprites = pygame.sprite.Group()
         
         self.setup()
+        
+        # Points of the level
+        self.children_left = 0
         self.points_display = Overlay_points(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
 
     def setup(self):
@@ -29,22 +32,22 @@ class Level:
         for x, y, surf in tmx_data.get_layer_by_name("Water").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
             Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+        for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, self.all_sprites, LAYERS["map"])
             
         for x, y, surf in tmx_data.get_layer_by_name("Decoration").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
             Generic(pos, surf, self.all_sprites, LAYERS["map"])
-        
-        for x, y, surf in tmx_data.get_layer_by_name("Fences").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
 
         for x, y, surf in tmx_data.get_layer_by_name("Bridge").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
             Generic(pos, surf, self.all_sprites, LAYERS["map"])
-        
-        for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
+            
+        for x, y, surf in tmx_data.get_layer_by_name("Fences").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+            Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+
         
         for obj in tmx_data.get_layer_by_name("Trees"):
             surf = obj.image
