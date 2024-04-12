@@ -1,4 +1,4 @@
-import pygame 
+import pygame
 from settings import *
 from player import Player
 from enemy import Enemy
@@ -94,27 +94,26 @@ class Level:
         self.all_sprites.update(dt)
         
 class CameraGroup(pygame.sprite.Group):
-	def __init__(self):
-		super().__init__()
-		self.display_surface = pygame.display.get_surface()
-		self.offset = pygame.math.Vector2()
-
-	def custom_draw(self, player):
-		self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
-		self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
-
-		for layer in LAYERS.values():
-			for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
-				if sprite.z == layer:
-					offset_rect = sprite.rect.copy()
-					offset_rect.center -= self.offset
-					self.display_surface.blit(sprite.image, offset_rect)
-
-					# # anaytics
-					if sprite == player:
-						pygame.draw.rect(self.display_surface,'red',offset_rect,5)
-						hitbox_rect = player.hitbox.copy()
-						hitbox_rect.center = offset_rect.center
-						pygame.draw.rect(self.display_surface,'green',hitbox_rect,5)
-						# target_pos = offset_rect.center + PLAYER_TOOL_OFFSET[player.status.split('_')[0]]
-						# pygame.draw.circle(self.display_surface,'blue',target_pos,5)
+    def __init__(self):
+        super().__init__()
+        self.display_surface = pygame.display.get_surface()
+        self.offset = pygame.math.Vector2()
+        
+    def custom_draw(self, player):
+        self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
+        self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
+        
+        for layer in LAYERS.values():
+            for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
+                if sprite.z == layer:
+                    offset_rect = sprite.rect.copy()
+                    offset_rect.center -= self.offset
+                    if(abs(sprite.rect.centerx-player.rect.centerx)<= OFFSET_X and abs(sprite.rect.centery-player.rect.centery)<=OFFSET_Y):
+                        self.display_surface.blit(sprite.image, offset_rect)
+                    
+                    # analytics
+                    if sprite == player:
+                        pygame.draw.rect(self.display_surface, "red", offset_rect, 5)
+                        hitbox_rect = player.hitbox.copy()
+                        hitbox_rect.center = offset_rect.center
+                        pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)
