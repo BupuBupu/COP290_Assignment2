@@ -2,7 +2,7 @@ import pygame
 from settings import *
 from player import Player
 from enemy import Enemy
-from overlay import Overlay_points
+from overlay import Overlay_text
 from sprites import Generic, Tree
 from pytmx.util_pygame import load_pygame
 from support import *
@@ -21,7 +21,9 @@ class Level:
         
         # Points of the level
         self.children_left = 0
-        self.points_display = Overlay_points(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
+        self.garbage_left = 0
+        self.points_display = Overlay_text(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
+        self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}", (SCREEN_WIDTH-100, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_rect_col=(255, 255, 255))
 
     def setup(self):
         tmx_data = load_pygame("assets/Another_New_Map/Map.tmx")
@@ -31,7 +33,7 @@ class Level:
                 
         for x, y, surf in tmx_data.get_layer_by_name("Water").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+            Generic(pos, surf, self.all_sprites, LAYERS["map"])
         for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
             Generic(pos, surf, self.all_sprites, LAYERS["map"])
@@ -47,6 +49,10 @@ class Level:
         for x, y, surf in tmx_data.get_layer_by_name("Fences").tiles():
             pos = (x*TILE_SIZE, y*TILE_SIZE)
             Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+            
+        for x, y, surf in tmx_data.get_layer_by_name("collision layer").tiles():
+            pos = (x*TILE_SIZE, y*TILE_SIZE)
+            Generic(pos, surf, self.collision_sprites, LAYERS["map"])
 
         
         for obj in tmx_data.get_layer_by_name("Trees"):
@@ -71,8 +77,14 @@ class Level:
     def run(self, dt):
         self.display_surface.fill("black")
         
+        # all_sprites display
         self.all_sprites.custom_draw(self.player)
+        
+        # overlay display
         self.points_display.display()
+        self.children_left_display.display()
+        
+        # updating all sprites
         self.all_sprites.update(dt)
 class CameraGroup(pygame.sprite.Group):
 	def __init__(self):

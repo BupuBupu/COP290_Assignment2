@@ -15,3 +15,7 @@ LAYERS = {
     "map": 0,
     "main": 1
 }
+
+# Attributes of level
+MAX_KIDS = 10
+MAX_GARBAGE = 20
