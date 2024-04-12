@@ -3,8 +3,9 @@ from settings import *
 from support import import_folder
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, target, pos, group, speed, anim_speed, enemy_num=1):
+    def __init__(self, target, pos, group, speed, anim_speed, garbage_drop_interval=4, enemy_num=1): # garbage drop interval is in seconds
         super().__init__(group)
+        self.garbage_drop_interval = garbage_drop_interval
         self.enemy_num = enemy_num
         
         # general setup
@@ -23,5 +24,9 @@ class Enemy(pygame.sprite.Sprite):
         self.target = target
     
     def decide_direction(self):
+        # Will move randomly in a pattern when player is far away by some threshold, it will only decide its direction based on target when it is in some proximity
         pass # will decide on self.target
+
+    def garbage_drop(self): # drop garbage at some intervals
+        pass
     

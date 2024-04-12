@@ -23,8 +23,8 @@ class Level:
         self.children_left = 100
         self.garbage_left = 100
         self.points_display = Overlay_text(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
-        self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}", (SCREEN_WIDTH-120, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
-        self.garbage_left_display = Overlay_text(f"Garbage remaining:{self.garbage_left}", (SCREEN_WIDTH-150, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}/{MAX_KIDS}", (SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.garbage_left_display = Overlay_text(f"Garbage remaining:{self.garbage_left}/{MAX_GARBAGE}", (SCREEN_WIDTH-170, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
 
     def setup(self):
         # basic ground
