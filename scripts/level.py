@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy
 from overlay import Overlay_text
-from sprites import Generic, Tree
+from sprites import Generic, Tree, Water
 from pytmx.util_pygame import load_pygame
 from support import *
 
@@ -20,34 +20,45 @@ class Level:
         self.setup()
         
         # Points of the level
-        self.children_left = 0
-        self.garbage_left = 0
+        self.children_left = 100
+        self.garbage_left = 100
         self.points_display = Overlay_text(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
-        self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}", (SCREEN_WIDTH-100, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_rect_col=(255, 255, 255))
+        self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}", (SCREEN_WIDTH-120, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.garbage_left_display = Overlay_text(f"Garbage remaining:{self.garbage_left}", (SCREEN_WIDTH-150, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
 
     def setup(self):
+        # basic ground
         tmx_data = load_pygame("assets/Another_New_Map/Map.tmx")
         for x, y, surf in tmx_data.get_layer_by_name("Ground").tiles():
             Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
                 
+        # water
+        water_frames = import_folder("graphics/water", 1)
         for x, y, surf in tmx_data.get_layer_by_name("Water").tiles():
-            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
+            Water((x*TILE_SIZE, y*TILE_SIZE), water_frames, self.all_sprites, LAYERS["map"])
+        
+        # spec decor
         for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
             Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
-            
+        
+        # decor
         for x, y, surf in tmx_data.get_layer_by_name("Decoration").tiles():
             Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
 
+        # bridge
         for x, y, surf in tmx_data.get_layer_by_name("Bridge").tiles():
             Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
             
+        # fences
         for x, y, surf in tmx_data.get_layer_by_name("Fences").tiles():
             Generic((x*TILE_SIZE, y*TILE_SIZE), surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
             
+        # collision layer
         for x, y, surf in tmx_data.get_layer_by_name("collision layer").tiles():
             Generic((x*TILE_SIZE, y*TILE_SIZE), surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
 
         
+        # objects
         for obj in tmx_data.get_layer_by_name("Trees"):
             surf = obj.image
             Tree(
@@ -57,6 +68,7 @@ class Level:
                 groups=[self.all_sprites, self.collision_sprites]
             )
         
+        # player and enemy spawn positions
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
         self.enemy1 = Enemy(
             target=self.player,
@@ -68,7 +80,7 @@ class Level:
         )
     
     def run(self, dt):
-        self.display_surface.fill("black")
+        self.display_surface.fill("#9bd4c3")
         
         # all_sprites display
         self.all_sprites.custom_draw(self.player)
@@ -76,9 +88,11 @@ class Level:
         # overlay display
         self.points_display.display()
         self.children_left_display.display()
+        self.garbage_left_display.display()
         
         # updating all sprites
         self.all_sprites.update(dt)
+        
 class CameraGroup(pygame.sprite.Group):
 	def __init__(self):
 		super().__init__()
