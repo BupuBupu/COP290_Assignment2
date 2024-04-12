@@ -28,31 +28,24 @@ class Level:
     def setup(self):
         tmx_data = load_pygame("assets/Another_New_Map/Map.tmx")
         for x, y, surf in tmx_data.get_layer_by_name("Ground").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
                 
         for x, y, surf in tmx_data.get_layer_by_name("Water").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
         for x, y, surf in tmx_data.get_layer_by_name("spec").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
             
         for x, y, surf in tmx_data.get_layer_by_name("Decoration").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
 
         for x, y, surf in tmx_data.get_layer_by_name("Bridge").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, self.all_sprites, LAYERS["map"])
             
         for x, y, surf in tmx_data.get_layer_by_name("Fences").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
             
         for x, y, surf in tmx_data.get_layer_by_name("collision layer").tiles():
-            pos = (x*TILE_SIZE, y*TILE_SIZE)
-            Generic(pos, surf, self.collision_sprites, LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
 
         
         for obj in tmx_data.get_layer_by_name("Trees"):
