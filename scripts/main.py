@@ -15,10 +15,13 @@ class Game:
 		self.game_menu = "main_menu"
 		self.start_image = pygame.image.load("./assets/UIs/Main_Menu/start_btn.png").convert_alpha()
 		self.exit_image = pygame.image.load("./assets/UIs/Main_Menu/exit_btn.png").convert_alpha()
+		self.continue_image = pygame.image.load("./assets/UIs/Main_Menu/conti_btn.png").convert_alpha()
 		self.start_btn = button.Button(400, 300, self.start_image, 1)
 		self.exit_btn = button.Button(850, 300, self.exit_image, 1)
+		self.continue_btn = button.Button(640, 500, self.continue_image, 1)
 		self.font = pygame.font.SysFont("garamond",100)
 		self.text_col = (255,255,255)
+		self.init_start = False
 	def draw_text(self,text, font, text_col, x, y):
 		img = font.render(text, True, text_col)
 		self.screen.blit(img, (x, y))
@@ -35,7 +38,11 @@ class Game:
 					if self.start_btn.draw(self.screen):
 						self.game_menu = "playing"
 						self.game_paused = False
+						self.init_start = True
 						self.level = Level()
+					if self.init_start and self.continue_btn.draw(self.screen):
+						self.game_menu = "playing"
+						self.game_paused = False
 					if self.exit_btn.draw(self.screen):
 						pygame.quit()
 						sys.exit()
