@@ -9,6 +9,8 @@ class Game:
 		pygame.init()
 		self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 		pygame.display.set_caption('Sprout land')
+		self.icon = pygame.image.load("./assets/UIs/game_icon.png")
+		pygame.display.set_icon(self.icon)
 		self.clock = pygame.time.Clock()
 		self.level = Level()
 		self.game_paused = True
