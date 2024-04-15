@@ -2,7 +2,7 @@ import pygame
 from settings import *
 from player import Player
 from enemy import Enemy
-from overlay import Overlay_text
+from overlay import Overlay_text, Overlay_pointers
 from sprites import Generic, Tree, Water
 from pytmx.util_pygame import load_pygame
 from support import *
@@ -51,7 +51,7 @@ class Level:
             
         # fences
         for x, y, surf in tmx_data.get_layer_by_name("Fences").tiles():
-            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, [self.all_sprites, self.collision_sprites], LAYERS["map"])
+            Generic((x*TILE_SIZE, y*TILE_SIZE), surf, [self.all_sprites, self.collision_sprites], LAYERS["main"])
             
         # collision layer
         for x, y, surf in tmx_data.get_layer_by_name("collision layer").tiles():
@@ -78,6 +78,13 @@ class Level:
             anim_speed=PLAYER_ANIMATION_SPEED*0.8,
             enemy_num=1
         )
+        # pointers for every enemy
+        self.pointer1 = Overlay_pointers(self.enemy1, self.player)
+    
+    # def show_enemy_pointers(self, enemies):
+    #     # will show arrow pointers as overlay on screen depending on enemie's position if they are outside of screen
+    #     pass
+        
     
     def run(self, dt):
         self.display_surface.fill("#9bd4c3")
@@ -86,6 +93,7 @@ class Level:
         self.all_sprites.custom_draw(self.player)
         
         # overlay display
+        self.pointer1.display()
         self.points_display.display()
         self.children_left_display.display()
         self.garbage_left_display.display()
