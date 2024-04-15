@@ -11,6 +11,7 @@ class Game:
 		self.level = Level()
 
 	def run(self):
+		pygame.mouse.set_visible(False)
 		self.clock.tick(60)
 		previous_time = time.time()
 		while True:

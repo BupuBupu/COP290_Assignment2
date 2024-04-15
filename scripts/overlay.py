@@ -58,7 +58,7 @@ class Overlay_pointers:
             pos.x += pos_offset * math.cos(math.radians(degree))
             pos.y -= pos_offset * math.sin(math.radians(degree))
         
-        print("enemy:", enemy_pos, "player:", player_pos, "diff: ", diff, "degrees:", degree, math.cos(math.radians(degree)), math.sin(math.radians(degree)))
+        # print("enemy:", enemy_pos, "player:", player_pos, "diff: ", diff, "degrees:", degree, math.cos(math.radians(degree)), math.sin(math.radians(degree)))
         
         if(abs(diff.x)>SCREEN_WIDTH/2 or abs(diff.y)>SCREEN_HEIGHT/2):
             # we have to blit it on screen with the required rotation and pos on screen
