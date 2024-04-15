@@ -2,6 +2,7 @@ import pygame, sys, time
 from settings import *
 from level import Level
 import button
+import sys
 
 class Game:
 	def __init__(self):
@@ -16,7 +17,11 @@ class Game:
 		self.exit_image = pygame.image.load("./assets/UIs/Main_Menu/exit_btn.png").convert_alpha()
 		self.start_btn = button.Button(400, 300, self.start_image, 1)
 		self.exit_btn = button.Button(850, 300, self.exit_image, 1)
-
+		self.font = pygame.font.SysFont("garamond",100)
+		self.text_col = (255,255,255)
+	def draw_text(self,text, font, text_col, x, y):
+		img = font.render(text, True, text_col)
+		self.screen.blit(img, (x, y))
 	def run(self):
 		pygame.mouse.set_visible(False)
 		self.clock.tick(60)
@@ -26,6 +31,7 @@ class Game:
 				pygame.mouse.set_visible(True)
 				self.screen.fill((52,78,91))
 				if self.game_menu == "main_menu":
+					self.draw_text("KID_LOVERS", self.font, self.text_col, self.screen.get_width()/2 - 300, 100)
 					if self.start_btn.draw(self.screen):
 						self.game_menu = "playing"
 						self.game_paused = False
@@ -46,6 +52,7 @@ class Game:
 					pygame.quit()
 					sys.exit()
 			if not self.game_paused:
+				pygame.mouse.set_visible(False)
 				self.screen.fill((202, 228, 241))
 				self.level.run(dt)
 			pygame.display.update()
