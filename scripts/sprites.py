@@ -1,6 +1,6 @@
 import pygame
 from settings import *
-from timer import Timer
+from timers import Timer
 
 class Generic(pygame.sprite.Sprite):
 	def __init__(self, pos, surf, groups, z = LAYERS['main']):

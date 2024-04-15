@@ -24,3 +24,6 @@ LAYERS = {
 # Attributes of level
 MAX_KIDS = 10
 MAX_GARBAGE = 20
+
+# Enemy range detection
+TARGET_RADIUS = 700

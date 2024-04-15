@@ -72,9 +72,10 @@ class Level:
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
         self.enemy1 = Enemy(
             target=self.player,
-            pos=(SCREEN_WIDTH/4, SCREEN_HEIGHT/2),
+            pos=(SCREEN_WIDTH/2-1, SCREEN_HEIGHT/2),
             group=self.all_sprites,
             speed=PLAYER_SPEED*0.8,
+            collision_sprites=self.collision_sprites,
             anim_speed=PLAYER_ANIMATION_SPEED*0.8,
             enemy_num=1
         )
