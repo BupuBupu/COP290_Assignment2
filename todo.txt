@@ -26,3 +26,8 @@ Issues with Collisions:
 
 Can't handle multiple collisions in a single frame, 
 The latest collision in that frame takes the priority.
+
+
+
+EXE GENERATOR:
+pyinstaller -F -w -i icon.ico main.py
