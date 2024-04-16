@@ -114,7 +114,7 @@ class Enemy(pygame.sprite.Sprite):
     
     def update_timers(self):
         for timer in self.timers.values():
-            timer.update()
+            timer.update(not self.collide)
    
     def move(self, dt):
         if self.direction.magnitude() > 0:

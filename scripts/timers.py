@@ -16,13 +16,13 @@ class Timer:
         self.active = False
         self.start_time = 0
 
-    def update(self):
+    def update(self, bool_check=True):
         # actual timer happens here, this update func will be called continuously
         
         # We will actually activate it outside, so no need to activate it here
         current_time = pygame.time.get_ticks()
         if current_time - self.start_time >= self.duration:
-            if self.func and self.start_time!=0: # therefore it solves the previous bug
+            if self.func and self.start_time!=0 and bool_check: # therefore it solves the previous bug
                 self.func()
             self.deactivate()
         
