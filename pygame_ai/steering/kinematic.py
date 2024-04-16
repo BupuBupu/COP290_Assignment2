@@ -11,8 +11,7 @@ Notes
 """
 
 import math
-import random
-
+import random, sys
 import pygame
 import pygame.gfxdraw
 
@@ -20,6 +19,8 @@ from pygame_ai import colors
 from pygame_ai.utils import math_utils
 from pygame_ai.utils.list_utils import remove_if_exists
 from pygame_ai.gameobject import DummyGameObject
+
+import pygame_ai.steering.blended as blend
 
 class SteeringOutput(object):
     """ Container for Steering data
@@ -244,7 +245,47 @@ class Flee(KinematicSteeringBehavior):
             self.steering.linear *= self.character.max_accel
         
         return self.steering
+
+class FleeWithLimits(KinematicSteeringBehavior):
+    """:py:class:`KinematicSteeringBehavior` that makes the character **Flee** from target however in limits
+    
+    Parameters
+    ----------
+    character: :py:class:`~gameobject.GameObject`
+        Character with this behavior
+    target: :py:class:`~gameobject.GameObject`
+        Target to **Flee** from
+    seek_radius: int, optional
+        Distance from the center of the target at which the character will remain idle or wander
+    """
+    def __init__(self, character, target, seek_radius, obstacles):
+        self.character = character
+        self.target = target
+        self.seek_radius = seek_radius
+        self.steering = SteeringOutput()
+        self.obstacles = obstacles
+    
+    def draw_indicators(self, screen, offset=lambda pos: pos):
+        start = offset(self.character.position)
+        end = start + self.steering.linear
+        pygame.draw.line(screen, colors.GREEN, start, end)
+    
+    def get_steering(self):
+        # Get direction to the target
+        if(math.sqrt((self.character.rect.centerx-self.target.rect.centerx)**2 + (self.character.rect.centery-self.target.rect.centery)**2) <= self.seek_radius):
+            self.steering.linear = self.character.position - self.target.position
+            
+            # Velocity is along this direction at full speed
+            if(math_utils.is_not_null(self.steering.linear)):
+                self.steering.linear.normalize_ip()
+                self.steering.linear *= self.character.max_accel
+            print("tuppy")
+        else:
+            print("puppy")
+            self.steering = blend.Wander(self.character, self.obstacles).get_steering()
         
+        return self.steering
+
 class Arrive(KinematicSteeringBehavior):
     """ :py:class:`KinematicSteeringBehavior` that makes the character **Arrive** at a target
     
@@ -553,7 +594,7 @@ class Face(KinematicSteeringBehavior):
             self.align.target.orientation = math_utils.get_angle_from_vector(direction)
         
         return self.align.get_steering()
-        
+
 class LookWhereYoureGoing(KinematicSteeringBehavior):
     """ :py:class:`KinematicSteeringBehavior` that makes the character **Look Where He's Going**
      

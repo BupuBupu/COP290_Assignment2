@@ -40,6 +40,7 @@ This module also includes a couple of pre-implemented :py:class:`BlendedSteering
 from . import kinematic
 from . import path
 from pygame_ai.gameobject import DummyGameObject
+import sys
 
 class BehaviorAndWeight(object):
     """ Container for Behavior and Weight values
@@ -112,7 +113,9 @@ class BlendedSteering(kinematic.KinematicSteeringBehavior):
         
         # Accumulate all accelerations
         for behavior in self.behaviors:
+            #print(self.behaviors)
             steering += behavior.behavior.get_steering() * behavior.weight
+            
             
         # Crop the results and return
         steering_lin_accel = steering.linear.length()
@@ -210,6 +213,39 @@ class Arrive(BlendedSteering):
                 weight = 1),
         ]
         super(Arrive, self).__init__(character, behaviors)
+        
+class FleeWithLimits(BlendedSteering):
+    """:py:class:`~.BlendedSteering` that makes the character **Flee** from the target
+    
+    This is behavior is a more complex version of :py:class:`~.kinematic.Arrive`
+    that also **Looks Where it's Going** and tries to **Avoid Obstacles**.
+    
+    Parameters
+    ----------
+    character: :py:class:`~.GameObject`
+    target: :py:class:`~.GameObject`
+    obstacles: iterable(:pgsprite:`Sprite`)
+        Solid obstacles
+    """
+    def __init__(self, character, target, obstacles, seek_radius):
+        behaviors = [
+            # Flee
+            BehaviorAndWeight(
+                kinematic.FleeWithLimits(character, target, seek_radius, obstacles),
+                weight=1
+            ),
+            # Obstacle avoidance
+            BehaviorAndWeight(
+                kinematic.ObstacleAvoidance(character,obstacles),
+                weight = 2
+            ),
+            # LookWhereYouareGoing
+            BehaviorAndWeight(
+                kinematic.LookWhereYoureGoing(character),
+                weight = 1
+            )
+        ]
+        super(FleeWithLimits, self).__init__(character, behaviors)
         
 class Surround(BlendedSteering):
     """ :py:class:`~.BlendedSteering` that makes the character **Surround** a target
