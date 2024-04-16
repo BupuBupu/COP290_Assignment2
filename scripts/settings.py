@@ -18,7 +18,7 @@ PLAYER_ANIMATION_SPEED = 4
 # lower the layer num, more below it is in z-axis
 LAYERS = {
     "map":0,
-    "main": 1
+    "main": 1,
 }
 
 # Attributes of level

@@ -32,3 +32,12 @@ class Tree(Generic):
 		super().__init__(pos, surf, groups, z)
 		self.name=name
 
+class Garbage(pygame.sprite.Sprite):
+    def __init__(self, points, pos, groups, z=LAYERS['main']):
+        super().__init__(groups)
+        self.image = pygame.Surface((32, 64))
+        self.image.fill("blue")
+        self.rect = self.image.get_rect(center=pos)
+        self.z = z
+        self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.2, -self.rect.height * 0.75)
+        self.points = points

@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy
 from overlay import Overlay_text, Overlay_pointers
-from sprites import Generic, Tree, Water
+from sprites import Generic, Tree, Water, Garbage
 from pytmx.util_pygame import load_pygame
 from support import *
 
@@ -70,6 +70,8 @@ class Level:
         
         # player and enemy spawn positions
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
+        
+        self.garbage = Garbage(10, (3*SCREEN_WIDTH/4, SCREEN_HEIGHT/2), self.all_sprites, 1)
         self.enemy1 = Enemy(
             target=self.player,
             pos=(SCREEN_WIDTH/2-1, SCREEN_HEIGHT/2),

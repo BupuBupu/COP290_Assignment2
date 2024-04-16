@@ -1,15 +1,17 @@
 import pygame
 from settings import *
 from support import import_folder
+from sprites import Garbage
 from timers import Timer
 from random import choice
 from math import sqrt
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, target, pos, group, speed, anim_speed, collision_sprites, garbage_drop_interval=4, enemy_num=1): # garbage drop interval is in seconds
+    def __init__(self, target, pos, group, speed, anim_speed, collision_sprites, garbage_drop_interval=7.5, enemy_num=1): # garbage drop interval is in seconds
         super().__init__(group)
         self.garbage_drop_interval = garbage_drop_interval
         self.enemy_num = enemy_num
+        self.group = group
         
         # general setup
         self.image = pygame.Surface((32, 64))
@@ -33,7 +35,8 @@ class Enemy(pygame.sprite.Sprite):
         
         # timers
         self.timers = {
-            "change_direction": Timer(1000*5, self.change_direction_random)
+            "change_direction": Timer(1000*5, self.change_direction_random),
+            "garbage_drop": Timer(garbage_drop_interval*1000, self.garbage_drop)
         }
     
     # def import_assets(self):
@@ -110,7 +113,10 @@ class Enemy(pygame.sprite.Sprite):
             self.timers["change_direction"].activate()
                 
     def garbage_drop(self): # drop garbage at some intervals
-        pass
+        # drops garbage at enemies position
+        print(self.group)
+        Garbage(10, self.pos, self.group,z=2)
+        
     
     def update_timers(self):
         for timer in self.timers.values():
@@ -134,6 +140,9 @@ class Enemy(pygame.sprite.Sprite):
     
     def update(self, dt):
         # print(self.direction, self.collide)
+        if(not self.timers["garbage_drop"].active):
+            self.timers["garbage_drop"].activate()
+            print("garbage drop activated")
         self.update_timers()
         self.move(dt)
     
