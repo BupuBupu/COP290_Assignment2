@@ -33,7 +33,7 @@ class Enemy(pygame.sprite.Sprite):
         
         # timers
         self.timers = {
-            "change_direction": Timer(2000, self.change_direction_random)
+            "change_direction": Timer(1000*5, self.change_direction_random)
         }
     
     # def import_assets(self):
@@ -58,30 +58,33 @@ class Enemy(pygame.sprite.Sprite):
     
     def change_direction_collide(self, sprite):
         #self.direction = -self.direction
-        if (self.direction.x == 0 and self.direction.y > 0) or (self.direction.x < 0 and self.direction.y > 0):
-            # moving down, collision on bottom
-            self.hitbox.bottom = sprite.hitbox.top
-            self.direction.x = 1
-            self.direction.y = 0
-        elif (self.direction.x == 0 and self.direction.y < 0) or (self.direction.x > 0 and self.direction.y < 0):
-            # moving up, collision on top
-            self.hitbox.top = sprite.hitbox.bottom
-            self.direction.x = -1
-            self.direction.y = 0
-        elif (self.direction.x > 0 and self.direction.y == 0) or (self.direction.x > 0 and self.direction.y > 0):
-            # moving right, collision on right
-            self.hitbox.right = sprite.hitbox.left
-            self.direction.y = -1
-            self.direction.x = 0
-        elif (self.direction.x < 0 and self.direction.y == 0) or (self.direction.x < 0 and self.direction.y < 0):
-            # moving left, collision on left
-            self.hitbox.left = sprite.hitbox.right
-            self.direction.y = 1
-            self.direction.x = 0
-        self.rect.centerx = self.hitbox.centerx
-        self.rect.centery = self.hitbox.centery
-        self.pos.x = self.hitbox.centerx
-        self.pos.y = self.hitbox.centery
+        dirxn = (0, 0)
+        if (self.direction.x>0 and self.direction.y==0):
+            choices = [(0, -1),(0, 1), (-1, -1), (-1, 1),(-1,0)]
+            dirxn = choice(choices)
+        elif (self.direction.x>0 and self.direction.y<0):
+            choices = [(-1,-1),(1, 1), (-1, 0), (0, 1), (-1, 1)]
+            dirxn = choice(choices)
+        elif self.direction.x>0 and self.direction.y>0:
+            choices = [(-1, -1), (1,-1), (-1, 0), (0, -1), (-1, 1)]
+            dirxn = choice(choices)
+        elif self.direction.x==0 and self.direction.y>0:
+            choices = [(0,-1),(-1,-1),(1,-1),(-1,0),(1,0)]
+            dirxn = choice(choices)
+        elif self.direction.x==0 and self.direction.y<0:
+            choices = [(1,0),(-1,0),(-1,1),(1,1),(0,1)]
+            dirxn = choice(choices)
+        elif self.direction.x<0 and self.direction.y<0:
+            choices = [(1,1),(0,1),(1,0),(-1,1),(1,-1)]
+            dirxn = choice(choices)
+        elif self.direction.x<0 and self.direction.y==0:
+            choices = [(0,-1),(0,1),(1,-1),(1,1),(1,0)]
+            dirxn = choice(choices)
+        elif self.direction.x<0 and self.direction.y>0:
+            choices = [(-1,-1),(1,1),(1,0),(0,-1),(1,-1)]
+            dirxn = choice(choices)
+        self.direction.x = dirxn[0]
+        self.direction.y = dirxn[1]
             
     def change_direction_collide_proximity(self, sprite):
         # use dynamic collision to check the direction of collision
@@ -95,30 +98,16 @@ class Enemy(pygame.sprite.Sprite):
     
     def decide_direction(self):
         # will randomly change directions from it's initial position after a set timer, otherwise also if collides with an object, it changes direction
-        
-        # if not close to player, decide direction based on collision and random otherwise decide based on player's direction and collision too
-        self.mutual_dist = self.target.pos - self.pos
-        if(self.mutual_dist.magnitude()):
-            self.collide = False
-            for sprite in self.collision_sprites.sprites():
-                if hasattr(sprite, "hitbox"):
-                    if(sprite.hitbox.colliderect(self.hitbox)):
-                        self.collide = True
-                        self.change_direction_collide(sprite)
-            
-            if(not self.timers["change_direction"].active):
-                # can lead to random transport via collision when randomly direction decided
-                self.timers["change_direction"].activate()
-        else:
-            # first decide direction based on relative position of player and enemy
-            self.collide = False
-            self.direction = pygame.math.Vector2((1 if self.mutual_dist.x < 0 else -1, 1 if self.mutual_dist.y < 0 else -1))
-            for sprite in self.collision_sprites.sprites():
-                if hasattr(sprite, "hitbox"):
-                    if(sprite.hitbox.colliderect(self.hitbox)):
-                        self.collide = True
-                        # if collide decide direction randomly, but we have to do 
-                        self.change_direction_random()
+        for sprite in self.collision_sprites.sprites():
+            if hasattr(sprite, "hitbox"):
+                if self.hitbox.colliderect(sprite.hitbox):
+                    self.collide = True
+                    self.change_direction_collide(sprite)
+                    break
+                else:
+                    self.collide = False
+        if not self.collide and not self.timers["change_direction"].active:
+            self.timers["change_direction"].activate()
                 
     def garbage_drop(self): # drop garbage at some intervals
         pass
@@ -144,7 +133,7 @@ class Enemy(pygame.sprite.Sprite):
         self.decide_direction()
     
     def update(self, dt):
-        print(self.direction, self.collide)
+        # print(self.direction, self.collide)
         self.update_timers()
         self.move(dt)
     
