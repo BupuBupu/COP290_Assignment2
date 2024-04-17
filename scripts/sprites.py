@@ -102,7 +102,7 @@ class Garbage(pygame.sprite.Sprite):
             if keys[pygame.K_SPACE]:
                 self.player.timers["garbage_collect"].activate()
                 # garbage collected
-                self.player.points += 1
+                self.player.points += self.points
                 Particle(self.rect.topleft, self.image, self.groups()[0], LAYERS["main"], 300)
                 self.kill()
                 self.dec_garbageLeftfunc()

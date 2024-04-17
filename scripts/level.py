@@ -119,7 +119,7 @@ class Level:
             
     def enemy_drop_garbage(self, index):
         self.garbages.append(Garbage(
-            random.randint(10, 20),
+            points=GARBAGE_POINTS[index],
             pos=self.enemies[index].pos,
             groups=[self.all_sprites, self.garbage_sprites],
             player=self.player,
