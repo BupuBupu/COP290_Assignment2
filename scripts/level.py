@@ -149,7 +149,7 @@ class Level:
         # overlay display
         for i in range(len(self.pointers)):
             self.pointers[i].display()
-        self.points_display.render("Score: ", MAX_KIDS-self.player.points)
+        self.points_display.render("Score: ", self.player.points)
         self.points_display.display()
         self.children_left_display.render("Children Alive: ", MAX_KIDS-self.player.kids_caught)
         self.children_left_display.display()
