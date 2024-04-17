@@ -142,9 +142,10 @@ class Enemy(pygame.sprite.Sprite):
            if keys[pygame.K_SPACE]:
                self.target.timers["catch_kid"].activate()
                # kid catched
-               self.target.points += (self.speed*0.1+(16-self.garbage_drop_interval)*3) # multiplier for points, more the interval lesser the points and more the speed more the points
+               self.target.points += round(self.speed*0.1+(16-self.garbage_drop_interval)*3) # multiplier for points, more the interval lesser the points and more the speed more the points
                Particle(self.rect.topleft, self.image, self.groups()[0], self.z, 450)
                self.kill()
+               self.target.kids_caught += 1
                self.enemies[self.enemy_index]=DummyEnemy()
                self.pointers[self.enemy_index]=OverlayNullPointers() # replace the pointer with None
                

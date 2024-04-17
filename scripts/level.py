@@ -27,7 +27,7 @@ class Level:
         self.garbage_left = 0
         self.points_display = Overlay_text(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
         self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}/{MAX_KIDS}", (SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
-        self.garbage_left_display = Overlay_text(f"Garbage remaining:{self.garbage_left}/{MAX_GARBAGE}", (SCREEN_WIDTH-170, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.garbage_left_display = Overlay_text(f"Garbage remaining:{self.garbage_left}/{MAX_GARBAGE}", (SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
 
     def setup(self):
         # basic ground
@@ -126,10 +126,14 @@ class Level:
             garbage_num = random.randint(1, 20),
             garbages = self.garbages,
             garbage_index=len(self.garbages)-1,
+            dec_garbageLeftfunc=self.dec_garbage_left,
             z=LAYERS['main']
         ))
         self.garbage_left+=1
-    
+        
+    def dec_garbage_left(self):
+        self.garbage_left-=1
+        
     def run(self, dt):
         self.display_surface.fill("#9bd4c3")
         
@@ -144,8 +148,11 @@ class Level:
         # overlay display
         for i in range(len(self.pointers)):
             self.pointers[i].display()
+        self.points_display.render("Score: ", MAX_KIDS-self.player.points)
         self.points_display.display()
+        self.children_left_display.render("Children Alive: ", MAX_KIDS-self.player.kids_caught)
         self.children_left_display.display()
+        self.garbage_left_display.render("Garbage left: ", self.garbage_left)
         self.garbage_left_display.display()
         
         # updating all sprites

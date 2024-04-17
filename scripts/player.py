@@ -33,6 +33,7 @@ class Player(pygame.sprite.Sprite):
 		}
 
 		self.points = 0
+		self.kids_caught = 0
 
 	def import_assets(self):
 		self.animations = {

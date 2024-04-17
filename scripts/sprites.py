@@ -75,7 +75,7 @@ class Tree(Generic):
 	# 				z = 2)
 
 class Garbage(pygame.sprite.Sprite):
-    def __init__(self, points, pos, groups, player, garbage_num, garbages, garbage_index, z=LAYERS['main']):
+    def __init__(self, points, pos, groups, player, garbage_num, garbages, garbage_index, dec_garbageLeftfunc, z=LAYERS['main']):
         super().__init__(groups)
     
         self.image = pygame.image.load(f"assets/objects/Park_Garbage/j{garbage_num}.png").convert_alpha()
@@ -88,6 +88,7 @@ class Garbage(pygame.sprite.Sprite):
         self.player = player
         self.garbages = garbages
         self.garbage_index = garbage_index
+        self.dec_garbageLeftfunc = dec_garbageLeftfunc
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.2, -self.rect.height * 0.2)
         self.points = points
     
@@ -104,6 +105,7 @@ class Garbage(pygame.sprite.Sprite):
                 self.player.points += 1
                 Particle(self.rect.topleft, self.image, self.groups()[0], LAYERS["main"], 300)
                 self.kill()
+                self.dec_garbageLeftfunc()
                 self.garbages[self.garbage_index]=DummyGarbage()
                 
     
