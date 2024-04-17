@@ -26,8 +26,8 @@ class Level:
         self.children_left = MAX_KIDS
         self.garbage_left = 0
         self.points_display = Overlay_text(f"Score: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
-        self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}/{MAX_KIDS}", (SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
-        self.garbage_left_display = Overlay_text(f"Garbage remaining:{self.garbage_left}/{MAX_GARBAGE}", (SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.children_left_display = Overlay_text(f"Children Left:{self.children_left}/{MAX_KIDS}", (SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.garbage_left_display = Overlay_text(f" Garbage remaining:{self.garbage_left}/{MAX_GARBAGE}", (SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
 
     def setup(self):
         # basic ground
