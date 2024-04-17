@@ -124,6 +124,8 @@ class Level:
             groups=[self.all_sprites, self.garbage_sprites],
             player=self.player,
             garbage_num = random.randint(1, 20),
+            garbages = self.garbages,
+            garbage_index=len(self.garbages)-1,
             z=LAYERS['main']
         ))
         self.garbage_left+=1
