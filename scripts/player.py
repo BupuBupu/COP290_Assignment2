@@ -28,7 +28,8 @@ class Player(pygame.sprite.Sprite):
   
 		# timers
 		self.timers = {
-			"garbage_collect": Timer(350)
+			"garbage_collect": Timer(350),
+			"catch_kid": Timer(350)
 		}
 
 		self.points = 0
@@ -53,7 +54,7 @@ class Player(pygame.sprite.Sprite):
 		keys = pygame.key.get_pressed()
 
 		# directions 
-		if (not self.timers["garbage_collect"].active):
+		if (not self.timers["garbage_collect"].active and not self.timers["catch_kid"].active):
 			if keys[pygame.K_w] or keys[pygame.K_UP]:
 				self.direction.y = -1
 				self.status = 'up'
@@ -82,6 +83,8 @@ class Player(pygame.sprite.Sprite):
 			if keys[pygame.K_SPACE]:
 				if(not self.timers["garbage_collect"].active):
 					self.timers["garbage_collect"].activate()
+				if (not self.timers["catch_kid"].active):
+					self.timers["catch_kid"].activate()
 		else:
 			self.direction.x=0
 			self.direction.y=0

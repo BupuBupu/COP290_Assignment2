@@ -1,9 +1,9 @@
 import pygame, random
 from settings import *
 from player import Player
-from enemy import Enemy
+from enemy import Enemy, DummyEnemy
 from overlay import Overlay_text, Overlay_pointers
-from sprites import Generic, Tree, Water, Garbage
+from sprites import Generic, Tree, Water, Garbage, DummyObject
 from pytmx.util_pygame import load_pygame
 from support import *
 from timers import Timer
@@ -73,6 +73,7 @@ class Level:
         
         # player and enemy spawn positions
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
+        DummyObject((0, 0), self.all_sprites)
         
         self.garbages = []
         self.enemies = []
@@ -86,11 +87,18 @@ class Level:
         #     enemy_num=1
         # )
         self.random_speeds = []
+        self.random_positions = []
         for i in range(MAX_KIDS):
             self.random_speeds.append(random.random())
         for i in range(MAX_KIDS):
+            random_choice = random.choice(POSITION_AREAS)
+            rand_posx = random.randint(random_choice[0][0], random_choice[0][1])
+            rand_posy = random.randint(random_choice[1][0], random_choice[1][1])
+            self.random_positions.append((rand_posx, rand_posy))
+        self.pointers = []
+        for i in range(MAX_KIDS):
             self.enemies.append(Enemy(target=self.player,
-                                      pos=(SCREEN_WIDTH/2-1, SCREEN_HEIGHT/2),
+                                      pos=self.random_positions[i],
                                       group=[self.all_sprites, self.enemy_sprites],
                                       speed=PLAYER_SPEED*(0.5+self.random_speeds[i]),
                                       anim_speed=PLAYER_ANIMATION_SPEED*(0.5+self.random_speeds[i]),
@@ -98,9 +106,10 @@ class Level:
                                       garbage_func = self.enemy_drop_garbage,
                                       garbage_drop_interval=random.randint(5, 15),
                                       enemy_num=random.randint(1, 5),
-                                      enemy_index=i))
+                                      enemy_index=i,
+                                      enemies=self.enemies,
+                                      pointers=self.pointers))
         # pointers for every enemy
-        self.pointers = []
         for i in range(MAX_KIDS):
             self.pointers.append(Overlay_pointers(self.enemies[i], self.player))
     
@@ -123,7 +132,7 @@ class Level:
         
         # garbage drops
         for i in range(len(self.enemies)):
-            if(not self.enemies[i].timers["garbage_drop"].active):
+            if(hasattr(self.enemies[i], "timers") and not self.enemies[i].timers["garbage_drop"].active):
                 self.enemies[i].timers["garbage_drop"].activate()
         
         # all_sprites display

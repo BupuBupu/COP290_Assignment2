@@ -66,4 +66,8 @@ class Overlay_pointers:
             pointer_rect = pointer.get_rect(center=pos)
             self.display_surface.blit(pointer, pointer_rect)
     
-        
+class OverlayNullPointers:
+    def __init__(self):
+        pass
+    def display(self):
+        pass

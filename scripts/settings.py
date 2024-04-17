@@ -27,3 +27,5 @@ MAX_GARBAGE = 20
 
 # Enemy range detection
 TARGET_RADIUS = 700
+#Enemy spawn positions
+POSITION_AREAS = [((3269, 3520), (1664, 2176)), ((4160, 4416), (1664, 2176)), ((3904, 4416), (2530, 2786)), ((3264, 3776), (2530, 2786))]

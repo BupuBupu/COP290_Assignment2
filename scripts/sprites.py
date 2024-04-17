@@ -10,6 +10,14 @@ class Generic(pygame.sprite.Sprite):
 		self.z = z
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.2, -self.rect.height * 0.75)
 
+class DummyObject(pygame.sprite.Sprite):
+    def __init__(self, pos, groups, z=LAYERS["main"]):
+        super().__init__(groups)
+        self.image = pygame.Surface((32, 64))
+        self.image.fill("orange")
+        self.rect = self.image.get_rect(center=pos)
+        self.z = z
+
 class Water(Generic):
     def __init__(self, pos, frames, groups, z=LAYERS['main']):
         # animation setup
