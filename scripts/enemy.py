@@ -83,28 +83,28 @@ class Enemy(pygame.sprite.Sprite):
         #self.direction = -self.direction
         dirxn = (0, 0)
         if (self.direction.x>0 and self.direction.y==0):
-            choices = [(0, -1),(0, 1), (-1, -1), (-1, 1),(-1,0)]
+            choices = [ (-1, -1), (-1, 1),(-1,0)]
             dirxn = choice(choices)
         elif (self.direction.x>0 and self.direction.y<0):
-            choices = [(-1,-1),(1, 1), (-1, 0), (0, 1), (-1, 1)]
+            choices = [(-1,-1), (-1, 0), (0, 1)]
             dirxn = choice(choices)
         elif self.direction.x>0 and self.direction.y>0:
-            choices = [(-1, -1), (1,-1), (-1, 0), (0, -1), (-1, 1)]
+            choices = [(-1, -1), (-1, 0), (0, -1)]
             dirxn = choice(choices)
         elif self.direction.x==0 and self.direction.y>0:
-            choices = [(0,-1),(-1,-1),(1,-1),(-1,0),(1,0)]
+            choices = [(0,-1),(-1,-1),(1,-1)]
             dirxn = choice(choices)
         elif self.direction.x==0 and self.direction.y<0:
-            choices = [(1,0),(-1,0),(-1,1),(1,1),(0,1)]
+            choices = [(-1,1),(1,1),(0,1)]
             dirxn = choice(choices)
         elif self.direction.x<0 and self.direction.y<0:
-            choices = [(1,1),(0,1),(1,0),(-1,1),(1,-1)]
+            choices = [(1,1),(0,1),(1,0)]
             dirxn = choice(choices)
         elif self.direction.x<0 and self.direction.y==0:
-            choices = [(0,-1),(0,1),(1,-1),(1,1),(1,0)]
+            choices = [(1,-1),(1,1),(1,0)]
             dirxn = choice(choices)
         elif self.direction.x<0 and self.direction.y>0:
-            choices = [(-1,-1),(1,1),(1,0),(0,-1),(1,-1)]
+            choices = [(1,0),(0,-1),(1,-1)]
             dirxn = choice(choices)
         self.direction.x = dirxn[0]
         self.direction.y = dirxn[1]
