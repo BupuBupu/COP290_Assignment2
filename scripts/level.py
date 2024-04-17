@@ -123,6 +123,7 @@ class Level:
             pos=self.enemies[index].pos,
             groups=[self.all_sprites, self.garbage_sprites],
             player=self.player,
+            garbage_num = random.randint(1, 20),
             z=LAYERS['main']
         ))
         self.garbage_left+=1
