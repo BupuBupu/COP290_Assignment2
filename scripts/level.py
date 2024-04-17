@@ -135,30 +135,31 @@ class Level:
     def dec_garbage_left(self):
         self.garbage_left-=1
         
-    def run(self, dt):
-        self.display_surface.fill("#9bd4c3")
-        
-        # garbage drops
-        for i in range(len(self.enemies)):
-            if(hasattr(self.enemies[i], "timers") and not self.enemies[i].timers["garbage_drop"].active):
-                self.enemies[i].timers["garbage_drop"].activate()
-        
-        # all_sprites display
-        self.all_sprites.custom_draw(self.player)
-        
-        # overlay display
-        for i in range(len(self.pointers)):
-            self.pointers[i].display()
-        self.points_display.render("Score: ", self.player.points)
-        self.points_display.display()
-        self.children_left_display.render("Children Alive: ", MAX_KIDS-self.player.kids_caught)
-        self.children_left_display.display()
-        self.garbage_left_display.render("Garbage left: ", self.garbage_left)
-        self.garbage_left_display.display()
-        
-        # updating all sprites
-        self.all_sprites.update(dt)
-        # print(self.player.pos)
+    def run(self, dt, game_paused):
+        if(not game_paused):
+            self.display_surface.fill("#9bd4c3")
+            # print(self.enemies[0].pos)
+            # garbage drops
+            for i in range(len(self.enemies)):
+                if(hasattr(self.enemies[i], "timers") and not self.enemies[i].timers["garbage_drop"].active):
+                    self.enemies[i].timers["garbage_drop"].activate()
+            
+            # all_sprites display
+            self.all_sprites.custom_draw(self.player)
+            
+            # overlay display
+            for i in range(len(self.pointers)):
+                self.pointers[i].display()
+            self.points_display.render("Score: ", self.player.points)
+            self.points_display.display()
+            self.children_left_display.render("Children Alive: ", MAX_KIDS-self.player.kids_caught)
+            self.children_left_display.display()
+            self.garbage_left_display.render("Garbage left: ", self.garbage_left)
+            self.garbage_left_display.display()
+            
+            # updating all sprites
+            self.all_sprites.update(dt)
+            # print(self.player.pos)
         
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):

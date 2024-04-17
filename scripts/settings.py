@@ -12,8 +12,8 @@ OFFSET_X = 1000
 OFFSET_Y = 600
 
 # player attributes
-PLAYER_SPEED = 1000
-PLAYER_ANIMATION_SPEED = 20
+PLAYER_SPEED = 200
+PLAYER_ANIMATION_SPEED = 4
 
 # lower the layer num, more below it is in z-axis
 LAYERS = {

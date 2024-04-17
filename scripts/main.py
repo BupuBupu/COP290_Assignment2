@@ -45,6 +45,8 @@ class Game:
 		self.clock.tick(60)
 		previous_time = time.time()
 		while True:
+			dt = time.time() - previous_time
+			previous_time = time.time()
 			if self.game_paused:
 				pygame.mouse.set_visible(True)
 				self.screen.fill((52,78,91))
@@ -79,8 +81,6 @@ class Game:
 						pygame.quit()
 						sys.exit()
 				# pygame.display.update()
-			# dt = time.time() - previous_time
-			# previous_time = time.time()
 			keys = pygame.key.get_pressed()
 			if keys[pygame.K_ESCAPE]:
 				self.game_paused = True
@@ -90,15 +90,11 @@ class Game:
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
-			dt = time.time() - previous_time
-			previous_time = time.time()
 			if not self.game_paused:
 				pygame.mouse.set_visible(False)
 				self.screen.fill((202, 228, 241))
-				self.level.run(dt)
+			self.level.run(dt, self.game_paused)
 			pygame.display.update()
-			if(self.level is not None):
-				print(self.level.enemies[0].pos)
 
 if __name__ == '__main__':
 	game = Game()
