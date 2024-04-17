@@ -36,7 +36,7 @@ class Enemy(pygame.sprite.Sprite):
         self.target = target
         
         # collision
-        self.hitbox = self.rect.copy().inflate((0*self.rect.width, 0*self.rect.height))
+        self.hitbox = self.rect.copy().inflate((0.1*self.rect.width, 0.1*self.rect.height))
         self.collision_sprites = collision_sprites
         self.collide = False
         
@@ -213,6 +213,17 @@ class Enemy(pygame.sprite.Sprite):
         self.decide_direction()
     
     def update(self, dt):
+        if(self.pos.x<290 or self.pos.x>7330 or self.pos.y<290 or self.pos.y>4130):
+            if(self.target.pos.x>=320 and self.target.pos.x<=3264):
+                self.pos.x = (4416+7360)/2
+                self.pos.y = (320+4160)/2
+            else:
+                self.pos.x = (320+3264)/2
+                self.pos.y = (320+4160)/2
+            self.hitbox.centerx = self.pos.x
+            self.hitbox.centery = self.pos.y
+            self.rect.centerx = self.pos.x
+            self.rect.centery = self.pos.y
         self.get_status()
         self.animate(dt)
         self.update_timers()
