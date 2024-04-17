@@ -1,4 +1,5 @@
 import pygame
+from random import randint
 from settings import *
 from timers import Timer
 
@@ -53,9 +54,25 @@ class Particle(Generic):
             self.kill()
 
 class Tree(Generic):
-	def __init__(self, pos, surf, name, groups, z=LAYERS['main']):
-		super().__init__(pos, surf, groups, z)
-		self.name=name
+    def __init__(self, pos, surf, name, groups, z=LAYERS["main"]):
+        super().__init__(pos, surf, groups, z)
+        
+    #     # apples
+    #     self.apple_surf = pygame.image.load("graphics/fruit/apple.png")
+    #     self.apple_pos = APPLE_POS[name]
+    
+    # def create_fruit(self):
+    #     for pos in self.apple_pos:
+    #         if randint(0,10) < 2:
+    #             x = pos[0] + self.rect.left
+    #             y = pos[1] + self.rect.top
+    #             print("puppies")
+    #             print(self.groups())
+    #             Generic(
+	# 				pos = (x,y), 
+	# 				surf = self.apple_surf, 
+	# 				groups = self.groups()[0],
+	# 				z = 2)
 
 class Garbage(pygame.sprite.Sprite):
     def __init__(self, points, pos, groups, player, z=LAYERS['main']):

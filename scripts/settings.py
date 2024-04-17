@@ -21,6 +21,12 @@ LAYERS = {
     "main": 1,
 }
 
+# apple positions
+APPLE_POS = {
+	'tree_small': [(18,17), (30,37), (12,50), (30,45), (20,30), (30,10)],
+	'tree_medium': [(30,24), (60,65), (50,50), (16,40),(45,50), (42,70)]
+}
+
 # Attributes of level
 MAX_KIDS = 10
 MAX_GARBAGE = 20
@@ -28,4 +34,4 @@ MAX_GARBAGE = 20
 # Enemy range detection
 TARGET_RADIUS = 700
 #Enemy spawn positions
-POSITION_AREAS = [((320, 3264), (320, 2786)), ((320, 4416), (2786, 4160)), ((4416, 7360), (1664, 4160)), ((3264, 7630), (320, 1664))]
+POSITION_AREAS = [((320, 3264), (320, 2786)), ((320, 4416), (2786, 4160)), ((4416, 7360), (1664, 4160)), ((3264, 7360), (320, 1664))]
