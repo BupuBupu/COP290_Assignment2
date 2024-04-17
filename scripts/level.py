@@ -73,7 +73,7 @@ class Level:
         
         # player and enemy spawn positions
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
-        DummyObject((0, 0), self.all_sprites)
+        # DummyObject((0, 0), self.all_sprites)
         
         self.garbages = []
         self.enemies = []

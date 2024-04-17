@@ -5,7 +5,7 @@ from sprites import Particle
 from overlay import OverlayNullPointers
 from timers import Timer
 from random import choice
-from math import sqrt
+import math
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, target, pos, group, speed, anim_speed, collision_sprites, garbage_func, garbage_drop_interval=7.5, enemy_num=1, enemy_index=None, enemies=None, pointers=None): # garbage drop interval is in seconds
@@ -106,8 +106,55 @@ class Enemy(pygame.sprite.Sprite):
         elif self.direction.x<0 and self.direction.y>0:
             choices = [(1,0),(0,-1),(1,-1)]
             dirxn = choice(choices)
+        relx = sprite.hitbox.centerx-self.hitbox.centerx
+        rely = -(sprite.hitbox.centery-self.hitbox.centery)
+        degree = 0
+        if relx < 0 and rely < 0:
+            # 3rd part
+            try:
+                degree = 180+math.degrees(math.atan(rely/relx))
+            except ZeroDivisionError:
+                degree = 270
+            if(degree>=225):
+                self.hitbox.bottom = sprite.hitbox.top
+            else:
+                self.hitbox.left = sprite.hitbox.right
+        elif(relx>0 and rely > 0):
+            # 1st part
+            try:
+                degree = math.degrees(math.atan(rely/relx))
+            except ZeroDivisionError:
+                degree = 90
+            if(degree>=45):
+                self.hitbox.top = sprite.hitbox.bottom
+            else:
+                self.hitbox.right = sprite.hitbox.left
+        elif(relx > 0 and rely < 0):
+            # 4th part
+            try:
+                degree = 360 + math.degrees(math.atan(rely/relx))
+            except ZeroDivisionError:
+                degree = 270
+            if(degree>=315):
+                self.hitbox.right = sprite.hitbox.left
+            else:
+                self.hitbox.bottom = sprite.hitbox.top
+        else:
+            # 2nd part part
+            try:
+                degree = 180 + math.degrees(math.atan(rely/relx))
+            except:
+                degree = 90
+            if(degree>=135):
+                self.hitbox.left = sprite.hitbox.right
+            else:
+                self.hitbox.top = sprite.hitbox.bottom
         self.direction.x = dirxn[0]
         self.direction.y = dirxn[1]
+        self.rect.centerx = self.hitbox.centerx
+        self.rect.centery = self.hitbox.centery
+        self.pos.x = self.hitbox.centerx
+        self.pos.y = self.hitbox.centery
             
     def change_direction_collide_proximity(self, sprite):
         # use dynamic collision to check the direction of collision

@@ -43,23 +43,35 @@ class Overlay_pointers:
         pos = pygame.math.Vector2((SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
         pos_offset = 50
         if(diff.x < 0 and diff.y < 0):
-            # enemy on 2nd part of x-y plane
-            degree = 180+math.degrees(math.atan(diff.y/diff.x))
+            # enemy on 3rd part of x-y plane
+            try:
+                degree = 180+math.degrees(math.atan(diff.y/diff.x))
+            except ZeroDivisionError:
+                degree = 270
             pos.x += pos_offset * math.cos(math.radians(degree))
             pos.y -= pos_offset * math.sin(math.radians(degree))
         elif(diff.x>0 and diff.y > 0):
             # enemy on 1st part of x-y plane
-            degree = math.degrees(math.atan(diff.y/diff.x))
+            try:
+                degree = math.degrees(math.atan(diff.y/diff.x))
+            except ZeroDivisionError:
+                degree = 90
             pos.x += pos_offset * math.cos(math.radians(degree))
             pos.y -= pos_offset * math.sin(math.radians(degree))
         elif(diff.x > 0 and diff.y < 0):
             # enemy on 4th part of x-y plane
-            degree = 360 + math.degrees(math.atan(diff.y/diff.x))
+            try:
+                degree = 360 + math.degrees(math.atan(diff.y/diff.x))
+            except ZeroDivisionError:
+                degree = 270
             pos.x += pos_offset * math.cos(math.radians(degree))
             pos.y -= pos_offset * math.sin(math.radians(degree))
         else:
-            # enemy on 3rd part of x-y plane
-            degree = 180 + math.degrees(math.atan(diff.y/diff.x))
+            # enemy on 2nd part of x-y plane
+            try:
+                degree = 180 + math.degrees(math.atan(diff.y/diff.x))
+            except:
+                degree = 90
             pos.x += pos_offset * math.cos(math.radians(degree))
             pos.y -= pos_offset * math.sin(math.radians(degree))
         
