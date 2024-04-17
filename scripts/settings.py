@@ -2,10 +2,10 @@ import pygame
 from pygame.math import Vector2
 # screen
 pygame.init()
-# SCREEN_WIDTH = pygame.display.Info().current_w
-# SCREEN_HEIGHT = pygame.display.Info().current_h
-SCREEN_WIDTH = 1080
-SCREEN_HEIGHT = 720
+SCREEN_WIDTH = pygame.display.Info().current_w
+SCREEN_HEIGHT = pygame.display.Info().current_h
+# SCREEN_WIDTH = 1080
+# SCREEN_HEIGHT = 720
 TILE_SIZE = 64
 # only this much offset will actually be blit on the screen, i.e. what the player currently see on the screen
 OFFSET_X = 1000
@@ -34,4 +34,4 @@ MAX_GARBAGE = 20
 # Enemy range detection
 TARGET_RADIUS = 700
 #Enemy spawn positions
-POSITION_AREAS = [((320, 3264), (320, 2786)), ((320, 4416), (2786, 4160)), ((4416, 7360), (1664, 4160)), ((3264, 7360), (320, 1664))]
+POSITION_AREAS = [((384, 7200), (384, 1660)), ((384, 3100), (1664, 2786)), ((4500, 7200), (1664, 2786)), ((384, 7200), (2790, 4100))]
