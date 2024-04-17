@@ -7,10 +7,11 @@ from random import choice
 from math import sqrt
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, target, pos, group, speed, anim_speed, collision_sprites, garbage_drop_interval=7.5, enemy_num=1): # garbage drop interval is in seconds
+    def __init__(self, target, pos, group, speed, anim_speed, collision_sprites, garbage_func, garbage_drop_interval=7.5, enemy_num=1, enemy_index=None): # garbage drop interval is in seconds
         super().__init__(group)
         self.garbage_drop_interval = garbage_drop_interval
         self.enemy_num = enemy_num
+        self.enemy_index = enemy_index
         self.group = group
         
         # general setup
@@ -36,7 +37,7 @@ class Enemy(pygame.sprite.Sprite):
         # timers
         self.timers = {
             "change_direction": Timer(1000*5, self.change_direction_random),
-            "garbage_drop": Timer(garbage_drop_interval*1000, self.garbage_drop)
+            "garbage_drop": Timer(garbage_drop_interval*1000, garbage_func, enemy_index=enemy_index)
         }
     
     # def import_assets(self):
@@ -111,15 +112,9 @@ class Enemy(pygame.sprite.Sprite):
                     self.collide = False
         if not self.collide and not self.timers["change_direction"].active:
             self.timers["change_direction"].activate()
-                
-    def garbage_drop(self): # drop garbage at some intervals
-        # drops garbage at enemies position
-        print(self.group)
-        Garbage(10, self.pos, self.group,z=2)
-        
     
     def update_timers(self):
-        for timer in self.timers.values():
+        for key, timer in self.timers.items():
             timer.update(not self.collide)
    
     def move(self, dt):
@@ -139,10 +134,6 @@ class Enemy(pygame.sprite.Sprite):
         self.decide_direction()
     
     def update(self, dt):
-        # print(self.direction, self.collide)
-        if(not self.timers["garbage_drop"].active):
-            self.timers["garbage_drop"].activate()
-            print("garbage drop activated")
         self.update_timers()
         self.move(dt)
     

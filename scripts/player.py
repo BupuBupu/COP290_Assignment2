@@ -26,6 +26,11 @@ class Player(pygame.sprite.Sprite):
 		self.hitbox = self.rect.copy().inflate((-0.2*self.rect.width,-0.2*self.rect.height))
 		self.collision_sprites = collision_sprites
   
+		# timers
+		self.timers = {
+			"garbage_collect": Timer(350)
+		}
+
 		self.points = 0
 
 	def import_assets(self):
@@ -48,36 +53,48 @@ class Player(pygame.sprite.Sprite):
 		keys = pygame.key.get_pressed()
 
 		# directions 
-		if keys[pygame.K_w] or keys[pygame.K_UP]:
-			self.direction.y = -1
-			self.status = 'up'
-		elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-			self.direction.y = 1
-			self.status = 'down'
-		else:
-			self.direction.y = 0
+		if (not self.timers["garbage_collect"].active):
+			if keys[pygame.K_w] or keys[pygame.K_UP]:
+				self.direction.y = -1
+				self.status = 'up'
+			elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
+				self.direction.y = 1
+				self.status = 'down'
+			else:
+				self.direction.y = 0
 
-		if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-			self.direction.x = 1
-			self.status = 'right'
-		elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
-			self.direction.x = -1
-			self.status = 'left'
+			if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+				self.direction.x = 1
+				self.status = 'right'
+			elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
+				self.direction.x = -1
+				self.status = 'left'
+			else:
+				self.direction.x = 0
+			# faster movement
+			if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+				self.speed = PLAYER_SPEED * 2
+				self.animate_speed = PLAYER_ANIMATION_SPEED * 2
+			else:
+				self.speed = PLAYER_SPEED
+				self.animate_speed = PLAYER_ANIMATION_SPEED
+
+			if keys[pygame.K_SPACE]:
+				if(not self.timers["garbage_collect"].active):
+					self.timers["garbage_collect"].activate()
 		else:
-			self.direction.x = 0
-        # faster movement
-		if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-			self.speed = PLAYER_SPEED * 2
-			self.animate_speed = PLAYER_ANIMATION_SPEED * 2
-		else:
-			self.speed = PLAYER_SPEED
-			self.animate_speed = PLAYER_ANIMATION_SPEED
+			self.direction.x=0
+			self.direction.y=0
 
 	def get_status(self):
 		# idle
 		if self.direction.magnitude() == 0:
 			self.status = self.status.split('_')[0] + '_idle'
-
+   
+	def update_timers(self):
+		for timer in self.timers.values():
+			timer.update()
+   
 	def collision(self, direction):
 		for sprite in self.collision_sprites.sprites():
 			if hasattr(sprite, 'hitbox'):
@@ -97,7 +114,7 @@ class Player(pygame.sprite.Sprite):
 							self.hitbox.top = sprite.hitbox.bottom
 						self.rect.centery = self.hitbox.centery
 						self.pos.y = self.hitbox.centery
-
+  
 	def move(self,dt):
 		# normalizing a vector 
 		if self.direction.magnitude() > 0:
@@ -119,5 +136,6 @@ class Player(pygame.sprite.Sprite):
 		self.input()
 		self.get_status()
 
+		self.update_timers()
 		self.move(dt)
 		self.animate(dt)

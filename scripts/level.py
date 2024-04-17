@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 from settings import *
 from player import Player
 from enemy import Enemy
@@ -6,6 +6,7 @@ from overlay import Overlay_text, Overlay_pointers
 from sprites import Generic, Tree, Water, Garbage
 from pytmx.util_pygame import load_pygame
 from support import *
+from timers import Timer
 
 class Level:
     def __init__(self):
@@ -16,12 +17,14 @@ class Level:
         # sprite groups
         self.all_sprites = CameraGroup()
         self.collision_sprites = pygame.sprite.Group()
+        self.enemy_sprites = pygame.sprite.Group()
+        self.garbage_sprites = pygame.sprite.Group()
         
         self.setup()
         
         # Points of the level
-        self.children_left = 100
-        self.garbage_left = 100
+        self.children_left = MAX_KIDS
+        self.garbage_left = 0
         self.points_display = Overlay_text(f"Naughty Kids Kidnapped: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
         self.children_left_display = Overlay_text(f"Children Alive:{self.children_left}/{MAX_KIDS}", (SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         self.garbage_left_display = Overlay_text(f"Garbage remaining:{self.garbage_left}/{MAX_GARBAGE}", (SCREEN_WIDTH-170, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
@@ -71,32 +74,64 @@ class Level:
         # player and enemy spawn positions
         self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
         
-        self.garbage = Garbage(10, (3*SCREEN_WIDTH/4, SCREEN_HEIGHT/2), self.all_sprites, 1)
-        self.enemy1 = Enemy(
-            target=self.player,
-            pos=(SCREEN_WIDTH/2-1, SCREEN_HEIGHT/2),
-            group=self.all_sprites,
-            speed=PLAYER_SPEED*0.8,
-            collision_sprites=self.collision_sprites,
-            anim_speed=PLAYER_ANIMATION_SPEED*0.8,
-            enemy_num=1
-        )
+        self.garbages = []
+        self.enemies = []
+        # self.enemy1 = Enemy(
+        #     target=self.player,
+        #     pos=(SCREEN_WIDTH/2-1, SCREEN_HEIGHT/2),
+        #     group=self.all_sprites,
+        #     speed=PLAYER_SPEED*0.8,
+        #     collision_sprites=self.collision_sprites,
+        #     anim_speed=PLAYER_ANIMATION_SPEED*0.8,
+        #     enemy_num=1
+        # )
+        self.random_speeds = []
+        for i in range(MAX_KIDS):
+            self.random_speeds.append(random.random())
+        for i in range(MAX_KIDS):
+            self.enemies.append(Enemy(target=self.player,
+                                      pos=(SCREEN_WIDTH/2-1, SCREEN_HEIGHT/2),
+                                      group=[self.all_sprites, self.enemy_sprites],
+                                      speed=PLAYER_SPEED*(0.5+self.random_speeds[i]),
+                                      anim_speed=PLAYER_ANIMATION_SPEED*(0.5+self.random_speeds[i]),
+                                      collision_sprites=self.collision_sprites,
+                                      garbage_func = self.enemy_drop_garbage,
+                                      garbage_drop_interval=random.randint(5, 15),
+                                      enemy_num=random.randint(1, 5),
+                                      enemy_index=i))
         # pointers for every enemy
-        self.pointer1 = Overlay_pointers(self.enemy1, self.player)
+        self.pointers = []
+        for i in range(MAX_KIDS):
+            self.pointers.append(Overlay_pointers(self.enemies[i], self.player))
     
     # def show_enemy_pointers(self, enemies):
     #     # will show arrow pointers as overlay on screen depending on enemie's position if they are outside of screen
     #     pass
-        
+            
+    def enemy_drop_garbage(self, index):
+        self.garbages.append(Garbage(
+            random.randint(10, 20),
+            pos=self.enemies[index].pos,
+            groups=[self.all_sprites, self.garbage_sprites],
+            player=self.player,
+            z=LAYERS['main']
+        ))
+        self.garbage_left+=1
     
     def run(self, dt):
         self.display_surface.fill("#9bd4c3")
+        
+        # garbage drops
+        for i in range(len(self.enemies)):
+            if(not self.enemies[i].timers["garbage_drop"].active):
+                self.enemies[i].timers["garbage_drop"].activate()
         
         # all_sprites display
         self.all_sprites.custom_draw(self.player)
         
         # overlay display
-        self.pointer1.display()
+        for i in range(len(self.pointers)):
+            self.pointers[i].display()
         self.points_display.display()
         self.children_left_display.display()
         self.garbage_left_display.display()
