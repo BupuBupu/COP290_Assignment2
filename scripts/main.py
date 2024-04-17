@@ -12,7 +12,6 @@ class Game:
 		self.icon = pygame.image.load("./assets/UIs/game_icon.png")
 		pygame.display.set_icon(self.icon)
 		self.clock = pygame.time.Clock()
-		self.level = Level()
 		self.game_paused = True
 		self.game_menu = "main_menu"
 		self.start_image = pygame.image.load("./assets/UIs/Main_Menu/start_btn.png").convert_alpha()
@@ -26,6 +25,8 @@ class Game:
 		self.init_start = False
 		self.click_sfx = pygame.mixer.Sound("./assets/SoundEffects/click_sound.wav")
 		pygame.mixer.music.load("./assets/SoundEffects/BGM.mp3")
+
+		self.level = Level()
 
 	def play_music(self):
 		pygame.mixer.music.play(-1)
@@ -60,6 +61,7 @@ class Game:
 						if self.init_start:
 							self.play_music()
 						self.init_start = True
+						self.first_start = True
 						self.level = Level()
 						
 					if self.init_start and self.continue_btn.draw(self.screen):
@@ -76,7 +78,7 @@ class Game:
 						time.sleep(0.5)
 						pygame.quit()
 						sys.exit()
-				pygame.display.update()
+				# pygame.display.update()
 			# dt = time.time() - previous_time
 			# previous_time = time.time()
 			keys = pygame.key.get_pressed()
@@ -88,13 +90,15 @@ class Game:
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
+			dt = time.time() - previous_time
+			previous_time = time.time()
 			if not self.game_paused:
-				dt = time.time() - previous_time
-				previous_time = time.time()
 				pygame.mouse.set_visible(False)
 				self.screen.fill((202, 228, 241))
 				self.level.run(dt)
 			pygame.display.update()
+			if(self.level is not None):
+				print(self.level.enemies[0].pos)
 
 if __name__ == '__main__':
 	game = Game()

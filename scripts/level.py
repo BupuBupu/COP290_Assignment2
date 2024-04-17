@@ -72,7 +72,7 @@ class Level:
             )
         
         # player and enemy spawn positions
-        self.player = Player((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), self.all_sprites, collision_sprites=self.collision_sprites)
+        self.player = Player((6000, 1825), self.all_sprites, collision_sprites=self.collision_sprites)
         # DummyObject((0, 0), self.all_sprites)
         
         self.garbages = []
@@ -158,6 +158,7 @@ class Level:
         
         # updating all sprites
         self.all_sprites.update(dt)
+        # print(self.player.pos)
         
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
