@@ -25,7 +25,8 @@ class Game:
 		self.init_start = False
 		self.click_sfx = pygame.mixer.Sound("./assets/SoundEffects/click_sound.wav")
 		pygame.mixer.music.load("./assets/SoundEffects/BGM.mp3")
-
+		self.game_over_img = pygame.image.load("./assets/UIs/GOVER.png")
+		self.gover_btn = button.Button(400,300,self.game_over_img,1)
 		self.level = Level(180)
 
 	def play_music(self):
@@ -91,6 +92,14 @@ class Game:
 					pygame.quit()
 					sys.exit()
 			if not self.game_paused:
+				if self.level.game_over():
+					print("Game Over")
+					self.screen.fill((0,0,0))
+					pygame.mouse.set_visible(True)
+					if self.gover_btn.draw(self.screen):
+						self.game_menu = "main_menu"
+						self.game_paused = True 
+						continue 
 				pygame.mouse.set_visible(False)
 				self.screen.fill((202, 228, 241))
 			self.level.run(dt, self.game_paused)

@@ -156,9 +156,12 @@ class Level:
         if self.garbage_left==0 and (MAX_KIDS-self.player.kids_caught)==0:
             self.over_display.render("Game over")
             self.over_display.display() 
+            return True
         if self.time_elapsed + time.time()-self.start_time>=self.duration:
             self.over_display.render("Timer ran out")
             self.over_display.display()
+            return True 
+        return False
             
     def random_powerupSpawn(self, powerup):
         # Magnets should spawn after every 30or20 seconds
@@ -210,7 +213,10 @@ class Level:
             self.children_left_display.display()
             self.garbage_left_display.render("Garbage left: ", self.garbage_left)
             self.garbage_left_display.display()
-            self.timer_display.render("Time left: ", self.duration-round(self.time_elapsed+time.time()-self.start_time))
+            if not self.game_over():
+                self.timer_display.render("Time left: ", self.duration-round(self.time_elapsed+time.time()-self.start_time))
+            else:
+                self.timer_display.render("Time left: ----")
             self.timer_display.display()
             self.game_over()
             # updating all sprites
