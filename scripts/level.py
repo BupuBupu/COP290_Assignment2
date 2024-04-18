@@ -23,11 +23,11 @@ class Level:
         self.setup()
         
         # Points of the level
-        self.children_left = MAX_KIDS
         self.garbage_left = 0
-        self.points_display = Overlay_text(f"Score: {self.player.points}", (SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
-        self.children_left_display = Overlay_text(f"Children Left:{self.children_left}/{MAX_KIDS}", (SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
-        self.garbage_left_display = Overlay_text(f" Garbage remaining:{self.garbage_left}/{MAX_GARBAGE}", (SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.points_display = Overlay_text((SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
+        self.children_left_display = Overlay_text((SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.garbage_left_display = Overlay_text((SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.over_display = Overlay_text((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), 'freesansbold.ttf', 100, text_col=(0, 0, 0), text_rect_col=None)
 
     def setup(self):
         # basic ground
@@ -136,9 +136,9 @@ class Level:
         self.garbage_left-=1
 
     def game_over(self):
-        if self.garbage_left==0 and self.children_left==0:
-            over = Overlay_text("Game Over", (SCREEN_WIDTH/2, SCREEN_HEIGHT/2), 'freesansbold.ttf', 100, text_rect_col=None)
-            over.display() 
+        if self.garbage_left==0 and (MAX_KIDS-self.player.kids_caught)==0:
+            self.over_display.render("Game over")
+            self.over_display.display() 
         
     def run(self, dt, game_paused):
         if(not game_paused):
