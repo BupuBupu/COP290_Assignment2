@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy, DummyEnemy
 from overlay import Overlay_text, Overlay_pointers
-from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet, FastBoot
+from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet, FastBoot, TimeAdder
 from pytmx.util_pygame import load_pygame
 from support import *
 from timers import Timer
@@ -39,7 +39,8 @@ class Level:
         # timers
         self.timers = {
             "magnet_spawn": Timer(MAGNET_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="magnet"),
-            "fast_boot_spawn": Timer(FASTBOOTS_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="fast_boot")
+            "fast_boot_spawn": Timer(FASTBOOTS_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="fast_boot"),
+            "time_adder_spawn": Timer(TIME_ADDER_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="time_adder")
         }
 
     def setup(self):
@@ -169,13 +170,24 @@ class Level:
         elif(powerup=="fast_boot"):
             fast_boot = FastBoot((rand_posx, rand_posy), self.all_sprites, self.player)
             print("fastboot", fast_boot.pos)
+        elif(powerup=="time_adder"):
+            time_adder = TimeAdder((rand_posx, rand_posy), self.all_sprites, self.player)
+            print("time_adder", time_adder.pos)
     
     def powerup_spawn_signal(self):
         if(not self.timers["magnet_spawn"].active):
             self.timers["magnet_spawn"].activate()
         if(not self.timers["fast_boot_spawn"].active):
             self.timers["fast_boot_spawn"].activate()
+        if(not self.timers["time_adder_spawn"].active):
+            self.timers["time_adder_spawn"].activate()
     
+    # only when player collided with TimeAdder powerup
+    def inc_time(self):
+        if(self.player.timers["time_adder"].active):
+            self.time_elapsed -= TIME_INCREMENT
+            self.player.timers["time_adder"].deactivate()
+            
     def run(self, dt, game_paused):
         if(not game_paused):
             self.display_surface.fill("#9bd4c3")
@@ -189,6 +201,7 @@ class Level:
             self.all_sprites.custom_draw(self.player)
             self.update_timers()
             self.powerup_spawn_signal()
+            self.inc_time()
             
             # overlay display
             for i in range(len(self.pointers)):

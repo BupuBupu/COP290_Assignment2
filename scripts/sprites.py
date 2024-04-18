@@ -170,7 +170,7 @@ class FastBoot(pygame.sprite.Sprite):
         self.player = player
         
         self.timers={
-            "despawn": Timer(MAGNET_DESPAWN_TIME*1000, self.kill)
+            "despawn": Timer(FASTBOOTS_DESPAWN_TIME*1000, self.kill)
         }
         self.timers["despawn"].activate()
         
@@ -187,3 +187,35 @@ class FastBoot(pygame.sprite.Sprite):
     def update(self, dt):
         self.update_timers()
         self.fastboot_collected()
+
+class TimeAdder(pygame.sprite.Sprite):
+    def __init__(self, pos, groups, player, z=LAYERS["main"]):
+        super().__init__(groups)
+        self.image = pygame.image.load("assets/powerups/timeadder.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (1/3*self.image.get_width(), 1/3*self.image.get_height()))
+        self.image.set_colorkey((232, 28, 232))
+        self.rect = self.image.get_rect(center=pos)
+        self.z = z
+        self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.1, -self.rect.height * 0.1)
+
+        self.pos = pos
+        self.player = player
+        
+        self.timers={
+            "despawn": Timer(TIME_ADDER_DESPAWN_TIME*1000, self.kill)
+        }
+        self.timers["despawn"].activate()
+        
+    def timeadder_collected(self):
+        if(self.hitbox.colliderect(self.player.hitbox)):
+            self.player.timers["time_adder"].activate()
+            Particle(self.rect.topleft, self.image, self.groups()[0], LAYERS["main"], 300)
+            self.kill()
+    
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
+            
+    def update(self, dt):
+        self.update_timers()
+        self.timeadder_collected()

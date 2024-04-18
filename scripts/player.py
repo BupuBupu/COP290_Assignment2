@@ -31,7 +31,8 @@ class Player(pygame.sprite.Sprite):
 			"garbage_collect": Timer(350),
 			"catch_kid": Timer(350),
 			"magnet": Timer(MAGNET_DURATION*1000),
-			"fast_boot": Timer(FASTBOOTS_DURATION*1000)
+			"fast_boot": Timer(FASTBOOTS_DURATION*1000),
+			"time_adder": Timer(350) # just used to detect if it collided with this powerup
 		}
 
 		# miscallaneous attributes
@@ -76,13 +77,6 @@ class Player(pygame.sprite.Sprite):
 				self.status = 'left'
 			else:
 				self.direction.x = 0
-			# faster movement
-			if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-				self.speed = PLAYER_SPEED * 2
-				self.animate_speed = PLAYER_ANIMATION_SPEED * 2
-			else:
-				self.speed = PLAYER_SPEED
-				self.animate_speed = PLAYER_ANIMATION_SPEED
 
 			if keys[pygame.K_SPACE]:
 				if(not self.timers["garbage_collect"].active):
@@ -100,7 +94,11 @@ class Player(pygame.sprite.Sprite):
 
 	# used when the player have the powerup of fast_boot
 	def inc_speed(self):
-		if(self.timers["fast_boot"].active):
+		keys = pygame.key.get_pressed()
+		if(self.timers["fast_boot"].active and keys[pygame.K_LSHIFT]):
+			self.speed = PLAYER_SPEED*4
+			self.animate_speed = PLAYER_ANIMATION_SPEED*4
+		elif((self.timers["fast_boot"].active and not keys[pygame.K_LSHIFT]) or (not self.timers["fast_boot"].active and keys[pygame.K_LSHIFT])):
 			self.speed = PLAYER_SPEED*2
 			self.animate_speed = PLAYER_ANIMATION_SPEED*2
 		else:
