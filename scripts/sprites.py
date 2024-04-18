@@ -86,6 +86,7 @@ class Garbage(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
         self.z = z
         self.player = player
+        self.pos = pygame.math.Vector2(self.rect.center)
         self.garbages = garbages
         self.garbage_index = garbage_index
         self.dec_garbageLeftfunc = dec_garbageLeftfunc
@@ -93,8 +94,15 @@ class Garbage(pygame.sprite.Sprite):
         self.points = points
     
     def garbage_collected(self):
-        # check if player collided
-        if(self.hitbox.colliderect(self.player.hitbox)):
+        # check if player collided or withing reach of magnet radius
+        diff = self.player.pos - self.pos
+        if(self.player.timers["magnet"].active and diff.magnitude()<=MAGNET_RANGE):
+            self.player.points += self.points
+            Particle(self.rect.topleft, self.image, self.groups()[0], LAYERS["main"], 300)
+            self.kill()
+            self.dec_garbageLeftfunc()
+            self.garbages[self.garbage_index]=DummyGarbage()
+        elif(self.hitbox.colliderect(self.player.hitbox)):
             # check if self.player presses the key space
             # self.player.garbage_signal = False
             # in this between if the player presses space the garbage, self.player.garbage_signal will turn on
@@ -116,3 +124,25 @@ class DummyGarbage:
     def __init__(self) -> None:
         pass
             
+class Magnet(pygame.sprite.Sprite):
+    def __init__(self, pos, groups, player, z=LAYERS["main"]) -> None:
+        super().__init__(groups)
+        self.image = pygame.image.load("assets/powerups/magnet.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (0.125*self.image.get_width(), 0.125*self.image.get_height()))
+        self.image.set_colorkey((0, 0, 0))
+        self.rect = self.image.get_rect(center=pos)
+        self.z = z
+        self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.1, -self.rect.height * 0.1)
+
+        self.pos = pos
+        self.player = player
+    
+    def magnet_collected(self):
+        if(self.hitbox.colliderect(self.player.hitbox)):
+            self.player.timers["magnet"].activate()
+            Particle(self.rect.topleft, self.image, self.groups()[0], LAYERS["main"], 300)
+            self.kill()
+    
+    def update(self, dt):
+        self.magnet_collected()
+        

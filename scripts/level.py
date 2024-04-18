@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy, DummyEnemy
 from overlay import Overlay_text, Overlay_pointers
-from sprites import Generic, Tree, Water, Garbage, DummyObject
+from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet
 from pytmx.util_pygame import load_pygame
 from support import *
 from timers import Timer
@@ -35,6 +35,11 @@ class Level:
         self.start_time = time.time()
         self.time_elapsed = 0
         self.duration = duration
+        
+        # timers
+        self.timers = {
+            "magnet_spawn":Timer(MAGNET_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="magnet")
+        }
 
     def setup(self):
         # basic ground
@@ -123,7 +128,9 @@ class Level:
     # def show_enemy_pointers(self, enemies):
     #     # will show arrow pointers as overlay on screen depending on enemie's position if they are outside of screen
     #     pass
-            
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
     def enemy_drop_garbage(self, index):
         garbage_index = random.randint(1, 20)
         self.garbages.append(Garbage(
@@ -149,7 +156,20 @@ class Level:
         if self.time_elapsed + time.time()-self.start_time>=self.duration:
             self.over_display.render("Timer ran out")
             self.over_display.display()
-        
+            
+    def random_powerupSpawn(self, powerup):
+        # Magnets should spawn after every 30or20 seconds
+        random_choice = random.choice(POSITION_AREAS)
+        rand_posx = random.randint(random_choice[0][0], random_choice[0][1])
+        rand_posy = random.randint(random_choice[1][0], random_choice[1][1])
+        if(powerup=="magnet"):
+            magnet=Magnet((rand_posx, rand_posy), self.all_sprites, self.player)
+            print(magnet.pos)
+    
+    def magnet_spawn_signal(self):
+        if(not self.timers["magnet_spawn"].active):
+            self.timers["magnet_spawn"].activate()
+    
     def run(self, dt, game_paused):
         if(not game_paused):
             self.display_surface.fill("#9bd4c3")
@@ -161,6 +181,8 @@ class Level:
             
             # all_sprites display
             self.all_sprites.custom_draw(self.player)
+            self.update_timers()
+            self.magnet_spawn_signal()
             
             # overlay display
             for i in range(len(self.pointers)):

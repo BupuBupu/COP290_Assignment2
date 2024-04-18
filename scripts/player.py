@@ -29,9 +29,11 @@ class Player(pygame.sprite.Sprite):
 		# timers
 		self.timers = {
 			"garbage_collect": Timer(350),
-			"catch_kid": Timer(350)
+			"catch_kid": Timer(350),
+			"magnet": Timer(MAGNET_DURATION*1000),
 		}
 
+		# miscallaneous attributes
 		self.points = 0
 		self.kids_caught = 0
 
