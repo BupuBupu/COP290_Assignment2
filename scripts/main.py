@@ -102,7 +102,7 @@ class Game:
 						# print("hell")
 						self.game_menu = "main_menu"
 						self.game_paused = True 
-					self.draw_text(f"Your Score: {self.level.player.points}", self.font, (0,0,0), self.screen.get_width()/2 - 300, 100)
+					self.draw_text(f"Your Score: {self.level.player.points}", self.font, (0,0,0), self.screen.get_width()/2 - 2*self.continue_image.get_width()/2-15, 100)
 				else:
 					pygame.mouse.set_visible(False)
 					self.level.run(dt, self.game_paused)
