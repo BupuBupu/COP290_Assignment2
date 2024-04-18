@@ -34,6 +34,7 @@ class Level:
         # Timer of level
         self.start_time = time.time()
         self.time_elapsed = 0
+        self.add_time_once = False
         self.duration = duration
         
         # timers
@@ -217,9 +218,14 @@ class Level:
             self.game_over()
             # updating all sprites
             self.all_sprites.update(dt)
+            
+            self.add_time_once = True
             # print(self.player.pos)
-        else:
+        elif(self.add_time_once and game_paused):
             self.time_elapsed += time.time()-self.start_time
+            self.start_time = time.time()
+            self.add_time_once = False
+        if(game_paused):
             self.start_time = time.time()
         
 class CameraGroup(pygame.sprite.Group):
