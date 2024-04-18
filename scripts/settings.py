@@ -28,7 +28,7 @@ APPLE_POS = {
 }
 
 # Attributes of level
-MAX_KIDS = 10
+MAX_KIDS = 1
 MAX_GARBAGE = 20
 
 #Garbage points

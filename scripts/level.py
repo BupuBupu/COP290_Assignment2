@@ -134,6 +134,11 @@ class Level:
         
     def dec_garbage_left(self):
         self.garbage_left-=1
+
+    def game_over(self):
+        if self.garbage_left==0 and self.children_left==0:
+            over = Overlay_text("Game Over", (SCREEN_WIDTH/2, SCREEN_HEIGHT/2), 'freesansbold.ttf', 100, text_rect_col=None)
+            over.display() 
         
     def run(self, dt, game_paused):
         if(not game_paused):
@@ -156,7 +161,7 @@ class Level:
             self.children_left_display.display()
             self.garbage_left_display.render("Garbage left: ", self.garbage_left)
             self.garbage_left_display.display()
-            
+            self.game_over()
             # updating all sprites
             self.all_sprites.update(dt)
             # print(self.player.pos)
