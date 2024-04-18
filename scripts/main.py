@@ -93,17 +93,22 @@ class Game:
 					sys.exit()
 			if not self.game_paused:
 				if self.level.game_over():
-					print("Game Over")
+					# print("Game Over")
 					self.screen.fill((0,0,0))
 					pygame.mouse.set_visible(True)
+					self.draw_text(f"Your Score: {self.level.player.points}", self.font, self.text_col, self.screen.get_width()/2 - 300, 100)
 					if self.gover_btn.draw(self.screen):
+						# print("hell")
 						self.game_menu = "main_menu"
 						self.game_paused = True 
-						continue 
-				pygame.mouse.set_visible(False)
-				self.screen.fill((202, 228, 241))
-			self.level.run(dt, self.game_paused)
-			pygame.display.update()
+				else:
+					pygame.mouse.set_visible(False)
+					self.level.run(dt, self.game_paused)
+				pygame.display.update()
+			else:
+				pygame.display.update()
+			
+			# pygame.display.update()
 
 if __name__ == '__main__':
 	game = Game()
