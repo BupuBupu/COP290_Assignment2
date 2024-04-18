@@ -17,16 +17,17 @@ class Game:
 		self.start_image = pygame.image.load("./assets/UIs/Main_Menu/start_btn.png").convert_alpha()
 		self.exit_image = pygame.image.load("./assets/UIs/Main_Menu/exit_btn.png").convert_alpha()
 		self.continue_image = pygame.image.load("./assets/UIs/Main_Menu/conti_btn.png").convert_alpha()
-		self.start_btn = button.Button(400, 300, self.start_image, 1)
-		self.exit_btn = button.Button(850, 300, self.exit_image, 1)
-		self.continue_btn = button.Button(640, 500, self.continue_image, 1)
+		self.start_btn = button.Button(self.screen.get_width()/4 - self.start_image.get_width()/2, 300, self.start_image, 1)
+		self.exit_btn = button.Button(3*self.screen.get_width()/4 - self.exit_image.get_width()/2, 300, self.exit_image, 1)
+		self.continue_btn = button.Button(self.screen.get_width()/2 - self.continue_image.get_width()/2, 500, self.continue_image, 1)
 		self.font = pygame.font.SysFont("garamond",100)
 		self.text_col = (255,255,255)
 		self.init_start = False
 		self.click_sfx = pygame.mixer.Sound("./assets/SoundEffects/click_sound.wav")
 		pygame.mixer.music.load("./assets/SoundEffects/BGM.mp3")
-		self.game_over_img = pygame.image.load("./assets/UIs/GOVER.png")
-		self.gover_btn = button.Button(400,300,self.game_over_img,1)
+		self.game_over_img = pygame.image.load("./assets/UIs/background.jpg").convert_alpha()
+		self.game_over_img = pygame.transform.scale(self.game_over_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+		self.gover_btn = button.Button(0,0,self.game_over_img,1)
 		self.level = Level(180)
 
 	def play_music(self):
@@ -52,7 +53,7 @@ class Game:
 				pygame.mouse.set_visible(True)
 				self.screen.fill((52,78,91))
 				if self.game_menu == "main_menu":
-					self.draw_text("KID_LOVERS", self.font, self.text_col, self.screen.get_width()/2 - 300, 100)
+					self.draw_text("Naughty Kids", self.font, self.text_col, self.screen.get_width()/2 - 2*self.continue_image.get_width()/2-15, 100)
 					
 					if self.start_btn.draw(self.screen):
 						self.click_sfx.play()
@@ -96,11 +97,12 @@ class Game:
 					# print("Game Over")
 					self.screen.fill((0,0,0))
 					pygame.mouse.set_visible(True)
-					self.draw_text(f"Your Score: {self.level.player.points}", self.font, self.text_col, self.screen.get_width()/2 - 300, 100)
+					
 					if self.gover_btn.draw(self.screen):
 						# print("hell")
 						self.game_menu = "main_menu"
 						self.game_paused = True 
+					self.draw_text(f"Your Score: {self.level.player.points}", self.font, (0,0,0), self.screen.get_width()/2 - 300, 100)
 				else:
 					pygame.mouse.set_visible(False)
 					self.level.run(dt, self.game_paused)
