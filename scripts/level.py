@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, time
 from settings import *
 from player import Player
 from enemy import Enemy, DummyEnemy
@@ -9,7 +9,7 @@ from support import *
 from timers import Timer
 
 class Level:
-    def __init__(self):
+    def __init__(self, duration):
         
         # get the display surface
         self.display_surface = pygame.display.get_surface()
@@ -22,12 +22,19 @@ class Level:
         
         self.setup()
         
-        # Points of the level
+        # Points/display of the level
         self.garbage_left = 0
-        self.points_display = Overlay_text((SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), 'freesansbold.ttf', 60, text_rect_col=None)
+        
+        self.timer_display = Overlay_text((SCREEN_WIDTH/2, SCREEN_HEIGHT*0.1/2), "freesansbold.ttf", 60, text_col="orange", text_rect_col=None)
+        self.points_display = Overlay_text((SCREEN_WIDTH-140, SCREEN_HEIGHT-150), 'freesansbold.ttf', 24, text_col=(255, 255, 255), text_rect_col=None)
         self.children_left_display = Overlay_text((SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         self.garbage_left_display = Overlay_text((SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         self.over_display = Overlay_text((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), 'freesansbold.ttf', 100, text_col=(0, 0, 0), text_rect_col=None)
+        
+        # Timer of level
+        self.start_time = time.time()
+        self.time_elapsed = 0
+        self.duration = duration
 
     def setup(self):
         # basic ground
@@ -139,6 +146,9 @@ class Level:
         if self.garbage_left==0 and (MAX_KIDS-self.player.kids_caught)==0:
             self.over_display.render("Game over")
             self.over_display.display() 
+        if self.time_elapsed + time.time()-self.start_time>=self.duration:
+            self.over_display.render("Timer ran out")
+            self.over_display.display()
         
     def run(self, dt, game_paused):
         if(not game_paused):
@@ -161,10 +171,15 @@ class Level:
             self.children_left_display.display()
             self.garbage_left_display.render("Garbage left: ", self.garbage_left)
             self.garbage_left_display.display()
+            self.timer_display.render("Time left: ", self.duration-round(self.time_elapsed+time.time()-self.start_time))
+            self.timer_display.display()
             self.game_over()
             # updating all sprites
             self.all_sprites.update(dt)
             # print(self.player.pos)
+        else:
+            self.time_elapsed += time.time()-self.start_time
+            self.start_time = time.time()
         
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):

@@ -26,7 +26,7 @@ class Game:
 		self.click_sfx = pygame.mixer.Sound("./assets/SoundEffects/click_sound.wav")
 		pygame.mixer.music.load("./assets/SoundEffects/BGM.mp3")
 
-		self.level = Level()
+		self.level = Level(180)
 
 	def play_music(self):
 		pygame.mixer.music.play(-1)
@@ -64,7 +64,7 @@ class Game:
 							self.play_music()
 						self.init_start = True
 						self.first_start = True
-						self.level = Level()
+						self.level = Level(180)
 						
 					if self.init_start and self.continue_btn.draw(self.screen):
 						self.click_sfx.play()
