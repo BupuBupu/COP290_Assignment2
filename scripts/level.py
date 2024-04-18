@@ -87,7 +87,7 @@ class Level:
             )
         
         # player and enemy spawn positions
-        self.player = Player((6000, 1825), self.all_sprites, collision_sprites=self.collision_sprites)
+        self.player = Player(PLAYER_SPAWN_POS, self.all_sprites, collision_sprites=self.collision_sprites)
         # DummyObject((0, 0), self.all_sprites)
         
         self.garbages = []
@@ -190,8 +190,9 @@ class Level:
             self.player.timers["time_adder"].deactivate()
             
     def run(self, dt, game_paused):
-        if(not game_paused):
+        if(not game_paused and not self.game_over()):
             self.display_surface.fill("#9bd4c3")
+            # print(self.player.pos)
             # print(self.enemies[0].pos)
             # garbage drops
             for i in range(len(self.enemies)):
@@ -218,7 +219,6 @@ class Level:
             else:
                 self.timer_display.render("Time left: ----")
             self.timer_display.display()
-            self.game_over()
             # updating all sprites
             self.all_sprites.update(dt)
             
@@ -250,8 +250,8 @@ class CameraGroup(pygame.sprite.Group):
                         self.display_surface.blit(sprite.image, offset_rect)
                     
                     # analytics
-                    if sprite == player:
-                        pygame.draw.rect(self.display_surface, "red", offset_rect, 5)
-                        hitbox_rect = player.hitbox.copy()
-                        hitbox_rect.center = offset_rect.center
-                        pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)
+                    # if sprite == player:
+                    #     pygame.draw.rect(self.display_surface, "red", offset_rect, 5)
+                    #     hitbox_rect = player.hitbox.copy()
+                    #     hitbox_rect.center = offset_rect.center
+                    #     pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)

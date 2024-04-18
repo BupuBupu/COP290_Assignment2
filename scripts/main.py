@@ -3,6 +3,7 @@ from settings import *
 from level import Level
 import button
 import sys
+import json
 
 class Game:
 	def __init__(self):
@@ -31,11 +32,23 @@ class Game:
 		self.level = Level(180)
 		self.home_image = pygame.image.load("./assets/UIs/home_screen.jpg").convert_alpha()
 		self.home_image = pygame.transform.scale(self.home_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+		self.high_score = 0
 
 	def play_music(self):
 		pygame.mixer.music.play(-1)
 		pygame.mixer.music.set_volume(0.5)
 	
+	def load_data(self):
+		try:
+			with open("high_score.json", "r") as f:
+				self.high_score = json.load(f)
+		except:
+			self.high_score = 0
+
+	def save_data(self):
+		with open("high_score.json", "w") as f:
+			json.dump(self.high_score, f)
+
 	def pause_music(self):
 		pygame.mixer.music.pause()
 	def unpause_music(self):
@@ -48,6 +61,7 @@ class Game:
 		pygame.mouse.set_visible(False)
 		self.clock.tick(60)
 		previous_time = time.time()
+		self.load_data()
 		while True:
 			dt = time.time() - previous_time
 			previous_time = time.time()
@@ -106,6 +120,9 @@ class Game:
 						self.game_menu = "main_menu"
 						self.game_paused = True 
 					self.draw_text(f"Your Score: {self.level.player.points}", self.font, (0,0,0), self.screen.get_width()/2 - 2*self.continue_image.get_width()/2-15, 100)
+					self.high_score = max(self.high_score, self.level.player.points)
+					self.draw_text(f"High Score: {self.high_score}", self.font, (255,255,255), self.screen.get_width()/2 - 2*self.continue_image.get_width()/2-15, 700)
+					self.save_data()
 				else:
 					pygame.mouse.set_visible(False)
 					self.level.run(dt, self.game_paused)
