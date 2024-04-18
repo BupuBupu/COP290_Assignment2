@@ -31,6 +31,7 @@ class Player(pygame.sprite.Sprite):
 			"garbage_collect": Timer(350),
 			"catch_kid": Timer(350),
 			"magnet": Timer(MAGNET_DURATION*1000),
+			"fast_boot": Timer(FASTBOOTS_DURATION*1000)
 		}
 
 		# miscallaneous attributes
@@ -96,6 +97,15 @@ class Player(pygame.sprite.Sprite):
 		# idle
 		if self.direction.magnitude() == 0:
 			self.status = self.status.split('_')[0] + '_idle'
+
+	# used when the player have the powerup of fast_boot
+	def inc_speed(self):
+		if(self.timers["fast_boot"].active):
+			self.speed = PLAYER_SPEED*2
+			self.animate_speed = PLAYER_ANIMATION_SPEED*2
+		else:
+			self.speed = PLAYER_SPEED
+			self.animate_speed = PLAYER_ANIMATION_SPEED
    
 	def update_timers(self):
 		for timer in self.timers.values():
@@ -143,5 +153,6 @@ class Player(pygame.sprite.Sprite):
 		self.get_status()
 
 		self.update_timers()
+		self.inc_speed()
 		self.move(dt)
 		self.animate(dt)

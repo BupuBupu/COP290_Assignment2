@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy, DummyEnemy
 from overlay import Overlay_text, Overlay_pointers
-from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet
+from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet, FastBoot
 from pytmx.util_pygame import load_pygame
 from support import *
 from timers import Timer
@@ -38,7 +38,8 @@ class Level:
         
         # timers
         self.timers = {
-            "magnet_spawn":Timer(MAGNET_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="magnet")
+            "magnet_spawn": Timer(MAGNET_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="magnet"),
+            "fast_boot_spawn": Timer(FASTBOOTS_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="fast_boot")
         }
 
     def setup(self):
@@ -164,11 +165,16 @@ class Level:
         rand_posy = random.randint(random_choice[1][0], random_choice[1][1])
         if(powerup=="magnet"):
             magnet=Magnet((rand_posx, rand_posy), self.all_sprites, self.player)
-            print(magnet.pos)
+            print("magnet", magnet.pos)
+        elif(powerup=="fast_boot"):
+            fast_boot = FastBoot((rand_posx, rand_posy), self.all_sprites, self.player)
+            print("fastboot", fast_boot.pos)
     
-    def magnet_spawn_signal(self):
+    def powerup_spawn_signal(self):
         if(not self.timers["magnet_spawn"].active):
             self.timers["magnet_spawn"].activate()
+        if(not self.timers["fast_boot_spawn"].active):
+            self.timers["fast_boot_spawn"].activate()
     
     def run(self, dt, game_paused):
         if(not game_paused):
@@ -182,7 +188,7 @@ class Level:
             # all_sprites display
             self.all_sprites.custom_draw(self.player)
             self.update_timers()
-            self.magnet_spawn_signal()
+            self.powerup_spawn_signal()
             
             # overlay display
             for i in range(len(self.pointers)):

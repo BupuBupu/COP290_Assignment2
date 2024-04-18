@@ -125,17 +125,22 @@ class DummyGarbage:
         pass
             
 class Magnet(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, player, z=LAYERS["main"]) -> None:
+    def __init__(self, pos, groups, player, z=LAYERS["main"]):
         super().__init__(groups)
         self.image = pygame.image.load("assets/powerups/magnet.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (0.125*self.image.get_width(), 0.125*self.image.get_height()))
-        self.image.set_colorkey((0, 0, 0))
+        self.image = pygame.transform.scale(self.image, (0.1*self.image.get_width(), 0.1*self.image.get_height()))
+        self.image.set_colorkey((232, 28, 232))
         self.rect = self.image.get_rect(center=pos)
         self.z = z
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.1, -self.rect.height * 0.1)
 
         self.pos = pos
         self.player = player
+        
+        self.timers={
+            "despawn": Timer(MAGNET_DESPAWN_TIME*1000, self.kill)
+        }
+        self.timers["despawn"].activate()
     
     def magnet_collected(self):
         if(self.hitbox.colliderect(self.player.hitbox)):
@@ -143,6 +148,42 @@ class Magnet(pygame.sprite.Sprite):
             Particle(self.rect.topleft, self.image, self.groups()[0], LAYERS["main"], 300)
             self.kill()
     
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
+            
     def update(self, dt):
+        self.update_timers()
         self.magnet_collected()
+
+class FastBoot(pygame.sprite.Sprite):
+    def __init__(self, pos, groups, player, z=LAYERS["main"]):
+        super().__init__(groups)
+        self.image = pygame.image.load("assets/powerups/fastboots.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (0.09*self.image.get_width(), 0.09*self.image.get_height()))
+        self.image.set_colorkey((232, 28, 232))
+        self.rect = self.image.get_rect(center=pos)
+        self.z = z
+        self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.1, -self.rect.height * 0.1)
+
+        self.pos = pos
+        self.player = player
         
+        self.timers={
+            "despawn": Timer(MAGNET_DESPAWN_TIME*1000, self.kill)
+        }
+        self.timers["despawn"].activate()
+        
+    def fastboot_collected(self):
+        if(self.hitbox.colliderect(self.player.hitbox)):
+            self.player.timers["fast_boot"].activate()
+            Particle(self.rect.topleft, self.image, self.groups()[0], LAYERS["main"], 300)
+            self.kill()
+    
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
+            
+    def update(self, dt):
+        self.update_timers()
+        self.fastboot_collected()

@@ -60,7 +60,12 @@ TARGET_RADIUS = 700
 #Enemy spawn positions
 POSITION_AREAS = [((384, 7200), (384, 1660)), ((384, 3100), (1664, 2786)), ((4500, 7200), (1664, 2786)), ((384, 7200), (2790, 4100))]
 
-# Powerups duration and Range
-MAGNET_SPAWN_TIME = 5 # in seconds
-MAGNET_DURATION = 10 # in seconds
+# Powerups duration(in seconds) and Range
+MAGNET_SPAWN_TIME = 5
+MAGNET_DESPAWN_TIME = 20
+MAGNET_DURATION = 10 
 MAGNET_RANGE = 200
+
+FASTBOOTS_SPAWN_TIME = 5 # in seconds
+FASTBOOTS_DESPAWN_TIME = 20
+FASTBOOTS_DURATION = 10
