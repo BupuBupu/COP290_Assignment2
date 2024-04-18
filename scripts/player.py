@@ -34,7 +34,7 @@ class Player(pygame.sprite.Sprite):
 			"fast_boot": Timer(FASTBOOTS_DURATION*1000),
 			"time_adder": Timer(350) # just used to detect if it collided with this powerup
 		}
-
+		
 		# miscallaneous attributes
 		self.points = 0
 		self.kids_caught = 0

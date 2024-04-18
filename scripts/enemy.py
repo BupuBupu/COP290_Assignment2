@@ -213,7 +213,7 @@ class Enemy(pygame.sprite.Sprite):
         self.decide_direction()
     
     def update(self, dt):
-        if(self.pos.x<290 or self.pos.x>7330 or self.pos.y<290 or self.pos.y>4130):
+        if(self.pos.x<290 or self.pos.x>7330 or self.pos.y<290 or self.pos.y>4130 ) or (self.pos.x>3264 and self.pos.x<4416 and self.pos.y<2786 and self.pos.y>1660):
             if(self.target.pos.x>=320 and self.target.pos.x<=3264):
                 self.pos.x = (4416+7360)/2
                 self.pos.y = (320+4160)/2
