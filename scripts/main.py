@@ -29,6 +29,8 @@ class Game:
 		self.game_over_img = pygame.transform.scale(self.game_over_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
 		self.gover_btn = button.Button(0,0,self.game_over_img,1)
 		self.level = Level(180)
+		self.home_image = pygame.image.load("./assets/UIs/home_screen.jpg").convert_alpha()
+		self.home_image = pygame.transform.scale(self.home_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 	def play_music(self):
 		pygame.mixer.music.play(-1)
@@ -52,6 +54,7 @@ class Game:
 			if self.game_paused:
 				pygame.mouse.set_visible(True)
 				self.screen.fill((52,78,91))
+				self.screen.blit(self.home_image, (0,0))
 				if self.game_menu == "main_menu":
 					self.draw_text("Naughty Kids", self.font, self.text_col, self.screen.get_width()/2 - 2*self.continue_image.get_width()/2-15, 100)
 					
