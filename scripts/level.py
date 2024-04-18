@@ -166,14 +166,11 @@ class Level:
         rand_posx = random.randint(random_choice[0][0], random_choice[0][1])
         rand_posy = random.randint(random_choice[1][0], random_choice[1][1])
         if(powerup=="magnet"):
-            magnet=Magnet((rand_posx, rand_posy), self.all_sprites, self.player)
-            print("magnet", magnet.pos)
+            Magnet((rand_posx, rand_posy), self.all_sprites, self.player)
         elif(powerup=="fast_boot"):
-            fast_boot = FastBoot((rand_posx, rand_posy), self.all_sprites, self.player)
-            print("fastboot", fast_boot.pos)
+            FastBoot((rand_posx, rand_posy), self.all_sprites, self.player)
         elif(powerup=="time_adder"):
-            time_adder = TimeAdder((rand_posx, rand_posy), self.all_sprites, self.player)
-            print("time_adder", time_adder.pos)
+            TimeAdder((rand_posx, rand_posy), self.all_sprites, self.player)
     
     def powerup_spawn_signal(self):
         if(not self.timers["magnet_spawn"].active):
