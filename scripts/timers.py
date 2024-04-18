@@ -17,6 +17,9 @@ class Timer:
     def deactivate(self):
         self.active = False
         self.start_time = 0
+    
+    def get_time_left(self):
+        return round((pygame.time.get_ticks() - self.start_time)/1000)
 
     def update(self, bool_check=True):
         # actual timer happens here, this update func will be called continuously

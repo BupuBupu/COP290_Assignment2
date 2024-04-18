@@ -30,7 +30,7 @@ class Level:
         self.children_left_display = Overlay_text((SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         self.garbage_left_display = Overlay_text((SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         self.over_display = Overlay_text((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), 'freesansbold.ttf', 100, text_col=(0, 0, 0), text_rect_col=None)
-        
+        self.power_up_time_left = Overlay_text((70, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         # Timer of level
         self.start_time = time.time()
         self.time_elapsed = 0
@@ -210,7 +210,7 @@ class Level:
                 self.pointers[i].display()
             self.points_display.render("Score: ", self.player.points)
             self.points_display.display()
-            self.children_left_display.render("Children Alive: ", MAX_KIDS-self.player.kids_caught)
+            self.children_left_display.render("Children left: ", MAX_KIDS-self.player.kids_caught)
             self.children_left_display.display()
             self.garbage_left_display.render("Garbage left: ", self.garbage_left)
             self.garbage_left_display.display()
@@ -219,6 +219,12 @@ class Level:
             else:
                 self.timer_display.render("Time left: ----")
             self.timer_display.display()
+            if (self.player.timers["magnet"].active):
+                self.power_up_time_left.render("Magnet: ", MAGNET_DURATION-self.player.timers["magnet"].get_time_left())
+                self.power_up_time_left.display()
+            if (self.player.timers["fast_boot"].active):
+                self.power_up_time_left.render("Fast Boots: ", FASTBOOTS_DURATION-self.player.timers["fast_boot"].get_time_left())
+                self.power_up_time_left.display()
             # updating all sprites
             self.all_sprites.update(dt)
             
@@ -230,6 +236,7 @@ class Level:
             self.add_time_once = False
         if(game_paused):
             self.start_time = time.time()
+
         
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
