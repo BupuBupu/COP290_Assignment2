@@ -9,7 +9,7 @@ class Game:
 	def __init__(self):
 		pygame.init()
 		self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-		pygame.display.set_caption('Sprout land')
+		pygame.display.set_caption('Naughty kids')
 		self.icon = pygame.image.load("./assets/UIs/game_icon.png")
 		pygame.display.set_icon(self.icon)
 		self.clock = pygame.time.Clock()
