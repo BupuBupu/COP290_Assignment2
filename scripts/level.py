@@ -37,6 +37,8 @@ class Level:
         self.add_time_once = False
         self.duration = duration
         
+        self.add_points_once = True
+        
         # timers
         self.timers = {
             "magnet_spawn": Timer(MAGNET_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="magnet"),
@@ -160,6 +162,9 @@ class Level:
         if self.garbage_left==0 and (MAX_KIDS-self.player.kids_caught)==0:
             self.over_display.render("Game over")
             self.over_display.display() 
+            if(self.add_points_once):
+                self.player.points += round(max(0, self.duration - (self.time_elapsed + time.time()-self.start_time)))
+                self.add_points_once = False
             return True
         if self.time_elapsed + time.time()-self.start_time>=self.duration:
             self.over_display.render("Timer ran out")
