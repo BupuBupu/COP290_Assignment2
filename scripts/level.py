@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy, DummyEnemy
 from overlay import Overlay_text, Overlay_pointers
-from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet, FastBoot, TimeAdder
+from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet, FastBoot, TimeAdder, Drop, Rain
 from pytmx.util_pygame import load_pygame
 from support import *
 from timers import Timer
@@ -43,6 +43,10 @@ class Level:
             "fast_boot_spawn": Timer(FASTBOOTS_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="fast_boot"),
             "time_adder_spawn": Timer(TIME_ADDER_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="time_adder")
         }
+        
+        # Miscallaneous effects
+        # self.rain = Rain(self.all_sprites)
+        # self.raining = True
 
     def setup(self):
         # basic ground
@@ -205,6 +209,10 @@ class Level:
             self.powerup_spawn_signal()
             self.inc_time()
             
+            # if self.raining:
+            #     # print("raining")
+            #     self.rain.update()
+            
             # overlay display
             for i in range(len(self.pointers)):
                 self.pointers[i].display()
@@ -249,11 +257,16 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
         
         for layer in LAYERS.values():
+            
             for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
+                # if(layer==3 and sprite.z == layer):
+                #     print(sprite)    
                 if sprite.z == layer:
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     if(abs(sprite.rect.centerx-player.rect.centerx)<= OFFSET_X and abs(sprite.rect.centery-player.rect.centery)<=OFFSET_Y):
+                        # if(layer ==3 and sprite.z==layer):
+                        #     print("display it puppy", offset_rect)
                         self.display_surface.blit(sprite.image, offset_rect)
                     
                     # analytics

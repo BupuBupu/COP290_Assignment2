@@ -18,8 +18,10 @@ PLAYER_ANIMATION_SPEED = 4
 
 # lower the layer num, more below it is in z-axis
 LAYERS = {
-    "map":0,
+    "map":0, # 1 is for rain floor and 3 is for rain drops
     "main": 1,
+    # "rain floor": 2,
+    # "rain drops": 3
 }
 
 # apple positions
