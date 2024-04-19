@@ -29,7 +29,7 @@ APPLE_POS = {
 }
 
 # Attributes of level
-MAX_KIDS = 15
+MAX_KIDS = 10
 MAX_GARBAGE = 20
 
 #Garbage points
@@ -62,7 +62,7 @@ TARGET_RADIUS = 700
 POSITION_AREAS = [((384, 7200), (384, 1660)), ((384, 3100), (1664, 2786)), ((4500, 7200), (1664, 2786)), ((384, 7200), (2790, 4100))]
 
 # Powerups duration(in seconds) and Range
-MAGNET_SPAWN_TIME = 15
+MAGNET_SPAWN_TIME = 20
 MAGNET_DESPAWN_TIME = 15
 MAGNET_DURATION = 10 
 MAGNET_RANGE = 400

@@ -257,8 +257,9 @@ class CameraGroup(pygame.sprite.Group):
                         self.display_surface.blit(sprite.image, offset_rect)
                     
                     # analytics
-                    # if sprite == player:
-                    #     pygame.draw.rect(self.display_surface, "red", offset_rect, 5)
-                    #     hitbox_rect = player.hitbox.copy()
-                    #     hitbox_rect.center = offset_rect.center
-                    #     pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)
+                    if sprite == player:
+                        if(player.timers["magnet"].active):
+                            pygame.draw.circle(self.display_surface, "red", offset_rect.center, MAGNET_RANGE, 5)
+                        # hitbox_rect = player.hitbox.copy()
+                        # hitbox_rect.center = offset_rect.center
+                        # pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)
