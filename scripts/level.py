@@ -3,7 +3,7 @@ from settings import *
 from player import Player
 from enemy import Enemy, DummyEnemy
 from overlay import Overlay_text, Overlay_pointers
-from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet, FastBoot, TimeAdder, Drop, Rain
+from sprites import Generic, Tree, Water, Garbage, DummyObject, Magnet, FastBoot, TimeAdder
 from pytmx.util_pygame import load_pygame
 from support import *
 from timers import Timer
