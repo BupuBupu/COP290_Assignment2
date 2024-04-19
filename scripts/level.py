@@ -43,6 +43,10 @@ class Level:
             "fast_boot_spawn": Timer(FASTBOOTS_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="fast_boot"),
             "time_adder_spawn": Timer(TIME_ADDER_SPAWN_TIME*1000, self.random_powerupSpawn, powerupType="time_adder")
         }
+        
+        # Miscallaneous effects
+        # self.rain = Rain(self.all_sprites)
+        # self.raining = True
 
     def setup(self):
         # basic ground
@@ -205,6 +209,10 @@ class Level:
             self.powerup_spawn_signal()
             self.inc_time()
             
+            # if self.raining:
+            #     # print("raining")
+            #     self.rain.update()
+            
             # overlay display
             for i in range(len(self.pointers)):
                 self.pointers[i].display()
@@ -249,16 +257,22 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
         
         for layer in LAYERS.values():
+            
             for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
+                # if(layer==3 and sprite.z == layer):
+                #     print(sprite)    
                 if sprite.z == layer:
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     if(abs(sprite.rect.centerx-player.rect.centerx)<= OFFSET_X and abs(sprite.rect.centery-player.rect.centery)<=OFFSET_Y):
+                        # if(layer ==3 and sprite.z==layer):
+                        #     print("display it puppy", offset_rect)
                         self.display_surface.blit(sprite.image, offset_rect)
                     
                     # analytics
-                    # if sprite == player:
-                    #     pygame.draw.rect(self.display_surface, "red", offset_rect, 5)
-                    #     hitbox_rect = player.hitbox.copy()
-                    #     hitbox_rect.center = offset_rect.center
-                    #     pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)
+                    if sprite == player:
+                        if(player.timers["magnet"].active):
+                            pygame.draw.circle(self.display_surface, "red", offset_rect.center, MAGNET_RANGE, 5)
+                        # hitbox_rect = player.hitbox.copy()
+                        # hitbox_rect.center = offset_rect.center
+                        # pygame.draw.rect(self.display_surface, "green", hitbox_rect, 5)
