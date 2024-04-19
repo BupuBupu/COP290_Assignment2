@@ -160,7 +160,7 @@ class Level:
     def game_over(self):
         if self.garbage_left==0 and (MAX_KIDS-self.player.kids_caught)==0:
             self.over_display.render("Game over")
-            self.over_display.display() 
+            self.over_display.display()
             return True
         if self.time_elapsed + time.time()-self.start_time>=self.duration:
             self.over_display.render("Timer ran out")
