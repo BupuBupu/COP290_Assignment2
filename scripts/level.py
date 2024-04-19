@@ -30,7 +30,8 @@ class Level:
         self.children_left_display = Overlay_text((SCREEN_WIDTH-140, SCREEN_HEIGHT-125), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         self.garbage_left_display = Overlay_text((SCREEN_WIDTH-155, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         self.over_display = Overlay_text((SCREEN_WIDTH/2, SCREEN_HEIGHT/2), 'freesansbold.ttf', 100, text_col=(0, 0, 0), text_rect_col=None)
-        self.power_up_time_left = Overlay_text((70, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.power_up_time_left_magnet = Overlay_text((70, SCREEN_HEIGHT-100), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
+        self.power_up_time_left_fb = Overlay_text((90, SCREEN_HEIGHT-80), "freesansbold.ttf", 24, text_col = (255, 255, 255), text_rect_col=None)
         # Timer of level
         self.start_time = time.time()
         self.time_elapsed = 0
@@ -233,11 +234,11 @@ class Level:
                 self.timer_display.render("Time left: ----")
             self.timer_display.display()
             if (self.player.timers["magnet"].active):
-                self.power_up_time_left.render("Magnet: ", MAGNET_DURATION-self.player.timers["magnet"].get_time_left())
-                self.power_up_time_left.display()
+                self.power_up_time_left_magnet.render("Magnet: ", MAGNET_DURATION-self.player.timers["magnet"].get_time_left())
+                self.power_up_time_left_magnet.display()
             if (self.player.timers["fast_boot"].active):
-                self.power_up_time_left.render("Fast Boots: ", FASTBOOTS_DURATION-self.player.timers["fast_boot"].get_time_left())
-                self.power_up_time_left.display()
+                self.power_up_time_left_fb.render("Fast Boots: ", FASTBOOTS_DURATION-self.player.timers["fast_boot"].get_time_left())
+                self.power_up_time_left_fb.display()
             # updating all sprites
             self.all_sprites.update(dt)
             
